@@ -5,6 +5,7 @@ import Hero from "../components/Hero";
 import WorkoutCategories from "../components/WorkoutCategories";
 import FeaturedExercises from "../components/FeaturedExercises";
 import ProgressDashboard from "../components/ProgressDashboard";
+import TrainingSchedules from "../components/TrainingSchedules";
 import Footer from "../components/Footer";
 
 const Index = () => {
@@ -22,7 +23,7 @@ const Index = () => {
         </>
       )}
       
-      {activeSection === "workouts" && <WorkoutCategories />}
+      {activeSection === "workouts" && <TrainingSchedules />}
       {activeSection === "progress" && <ProgressDashboard />}
       
       <Footer />
