@@ -1,51 +1,76 @@
 
-import { Play, ArrowRight } from "lucide-react";
+import { Play, ArrowRight, Star, Users, Award } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-blue-600/10 rounded-3xl"></div>
+    <section className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Background gradient with subtle pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/50 to-slate-800"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(120,119,198,0.3),transparent_50%)]"></div>
       
       <div className="max-w-7xl mx-auto relative">
         <div className="text-center">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
-            Master Your
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">
-              {" "}Body
+          {/* Badge */}
+          <div className="inline-flex items-center space-x-2 bg-orange-500/10 border border-orange-500/20 rounded-full px-4 py-2 mb-8 animate-fade-in">
+            <Star className="h-4 w-4 text-orange-400" />
+            <span className="text-orange-400 text-sm font-medium">Trusted by 100K+ Athletes</span>
+          </div>
+
+          <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-tight animate-fade-in">
+            Build Your
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-red-500">
+              Ultimate Body
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto animate-fade-in">
-            Transform your physique with bodyweight training. No gym needed - just dedication, consistency, and the right guidance.
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in">
+            Master calisthenics with structured programs, expert guidance, and a supportive community. 
+            Transform your strength, flexibility, and skills—no gym required.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
-            <button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-orange-500/25 flex items-center space-x-2">
-              <Play className="h-5 w-5" />
-              <span>Start Training</span>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in">
+            <button className="group bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-orange-500/25 flex items-center space-x-3">
+              <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
+              <span className="text-lg">Start Your Journey</span>
             </button>
             
-            <button className="border-2 border-slate-400 hover:border-white text-slate-300 hover:text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-2">
-              <span>View Workouts</span>
-              <ArrowRight className="h-5 w-5" />
+            <button className="group border-2 border-slate-400 hover:border-orange-400 text-slate-300 hover:text-orange-400 font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3">
+              <span className="text-lg">Explore Programs</span>
+              <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
         
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-orange-500/50 transition-all duration-300">
-            <div className="text-3xl font-bold text-orange-500 mb-2">500+</div>
-            <div className="text-gray-300">Exercises</div>
+        {/* Stats section */}
+        <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="text-center group">
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 backdrop-blur-lg rounded-2xl p-8 border border-slate-600/30 hover:border-orange-500/40 transition-all duration-500 hover:transform hover:scale-105">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
+                <Users className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-4xl font-bold text-white mb-2">100K+</div>
+              <div className="text-gray-300 text-lg">Active Members</div>
+            </div>
           </div>
           
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-orange-500/50 transition-all duration-300">
-            <div className="text-3xl font-bold text-orange-500 mb-2">50+</div>
-            <div className="text-gray-300">Workout Programs</div>
+          <div className="text-center group">
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 backdrop-blur-lg rounded-2xl p-8 border border-slate-600/30 hover:border-orange-500/40 transition-all duration-500 hover:transform hover:scale-105">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
+                <Award className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-4xl font-bold text-white mb-2">500+</div>
+              <div className="text-gray-300 text-lg">Expert Programs</div>
+            </div>
           </div>
           
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-orange-500/50 transition-all duration-300">
-            <div className="text-3xl font-bold text-orange-500 mb-2">100K+</div>
-            <div className="text-gray-300">Community Members</div>
+          <div className="text-center group">
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 backdrop-blur-lg rounded-2xl p-8 border border-slate-600/30 hover:border-orange-500/40 transition-all duration-500 hover:transform hover:scale-105">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
+                <Star className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-4xl font-bold text-white mb-2">4.9/5</div>
+              <div className="text-gray-300 text-lg">User Rating</div>
+            </div>
           </div>
         </div>
       </div>
