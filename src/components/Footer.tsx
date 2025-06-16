@@ -1,4 +1,3 @@
-
 import { Zap, Instagram, Youtube, Twitter } from "lucide-react";
 
 const Footer = () => {
@@ -10,7 +9,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <Zap className="h-8 w-8 text-orange-500" />
-              <span className="text-2xl font-bold text-white">CaliForce</span>
+              <span className="text-2xl font-bold text-white">Calibre</span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               Master your body with the power of calisthenics. Transform your physique through bodyweight training, no equipment needed.
@@ -53,7 +52,7 @@ const Footer = () => {
 
         <div className="border-t border-slate-700/50 mt-8 pt-8 text-center">
           <p className="text-gray-400">
-            © 2024 CaliForce. All rights reserved. Transform your body, transform your life.
+            © 2024 Calibre. All rights reserved. Transform your body, transform your life.
           </p>
         </div>
       </div>

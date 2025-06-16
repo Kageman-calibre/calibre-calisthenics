@@ -26,7 +26,7 @@ const Navigation = ({ activeSection, setActiveSection }: NavigationProps) => {
               <Zap className="h-6 w-6 text-white" />
             </div>
             <div>
-              <span className="text-2xl font-bold text-white">CaliForce</span>
+              <span className="text-2xl font-bold text-white">Calibre</span>
               <div className="text-xs text-orange-400 font-medium -mt-1">Elite Training</div>
             </div>
           </div>
