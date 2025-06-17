@@ -26,6 +26,19 @@ const WorkoutProgress = () => {
       setWorkoutHistory(history);
       calculateStats(history);
     }
+
+    // Listen for workout updates
+    const handleWorkoutAdded = () => {
+      const updatedHistory = localStorage.getItem('workoutHistory');
+      if (updatedHistory) {
+        const history = JSON.parse(updatedHistory);
+        setWorkoutHistory(history);
+        calculateStats(history);
+      }
+    };
+
+    window.addEventListener('workoutAdded', handleWorkoutAdded);
+    return () => window.removeEventListener('workoutAdded', handleWorkoutAdded);
   }, []);
 
   const calculateStats = (history: WorkoutSession[]) => {
@@ -49,18 +62,6 @@ const WorkoutProgress = () => {
       }
     }
     setCurrentStreak(streak);
-  };
-
-  const addWorkoutSession = (session: Omit<WorkoutSession, 'id'>) => {
-    const newSession = {
-      ...session,
-      id: Date.now().toString()
-    };
-    
-    const updatedHistory = [...workoutHistory, newSession];
-    setWorkoutHistory(updatedHistory);
-    localStorage.setItem('workoutHistory', JSON.stringify(updatedHistory));
-    calculateStats(updatedHistory);
   };
 
   const getWeeklyProgress = () => {

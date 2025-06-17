@@ -14,6 +14,7 @@ const Navigation = ({ activeSection, setActiveSection }: NavigationProps) => {
     { id: "home", label: "Home" },
     { id: "workouts", label: "Programs" },
     { id: "progress", label: "Progress" },
+    { id: "profile", label: "Profile" },
   ];
 
   return (
@@ -53,7 +54,10 @@ const Navigation = ({ activeSection, setActiveSection }: NavigationProps) => {
             <button className="p-3 text-gray-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all duration-300">
               <Settings className="h-5 w-5" />
             </button>
-            <button className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-3 rounded-xl transition-all duration-300 border border-slate-700 hover:border-slate-600">
+            <button 
+              onClick={() => setActiveSection("profile")}
+              className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-3 rounded-xl transition-all duration-300 border border-slate-700 hover:border-slate-600"
+            >
               <User className="h-4 w-4" />
               <span className="text-sm font-medium">Profile</span>
             </button>
@@ -91,7 +95,13 @@ const Navigation = ({ activeSection, setActiveSection }: NavigationProps) => {
                 </button>
               ))}
               <div className="border-t border-slate-700 mt-4 pt-4">
-                <button className="flex items-center space-x-3 w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-slate-700 hover:text-white transition-all duration-300">
+                <button 
+                  onClick={() => {
+                    setActiveSection("profile");
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center space-x-3 w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-slate-700 hover:text-white transition-all duration-300"
+                >
                   <User className="h-5 w-5" />
                   <span className="font-medium">Profile</span>
                 </button>
