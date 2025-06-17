@@ -6,6 +6,9 @@ import FeaturedExercises from "../components/FeaturedExercises";
 import TrainingSchedules from "../components/TrainingSchedules";
 import ProgressDashboard from "../components/ProgressDashboard";
 import UserProfile from "../components/UserProfile";
+import NutritionTracker from "../components/NutritionTracker";
+import CommunityHub from "../components/CommunityHub";
+import MobileFeatures from "../components/MobileFeatures";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
@@ -35,6 +38,30 @@ const Index = () => {
         return <ProgressDashboard />;
       case "profile":
         return <UserProfile />;
+      case "nutrition":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <NutritionTracker />
+            </div>
+          </section>
+        );
+      case "community":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <CommunityHub />
+            </div>
+          </section>
+        );
+      case "mobile":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <MobileFeatures />
+            </div>
+          </section>
+        );
       default:
         return (
           <>
