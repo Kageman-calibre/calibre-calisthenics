@@ -9,6 +9,11 @@ import UserProfile from "../components/UserProfile";
 import NutritionTracker from "../components/NutritionTracker";
 import CommunityHub from "../components/CommunityHub";
 import MobileFeatures from "../components/MobileFeatures";
+import AnalyticsDashboard from "../components/analytics/AnalyticsDashboard";
+import AIPersonalization from "../components/personalization/AIPersonalization";
+import IntegrationHub from "../components/integrations/IntegrationHub";
+import PremiumFeatures from "../components/premium/PremiumFeatures";
+import TrainerConnection from "../components/social/TrainerConnection";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
@@ -59,6 +64,46 @@ const Index = () => {
           <section className="py-20 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <MobileFeatures />
+            </div>
+          </section>
+        );
+      case "analytics":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <AnalyticsDashboard />
+            </div>
+          </section>
+        );
+      case "ai":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <AIPersonalization />
+            </div>
+          </section>
+        );
+      case "integrations":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <IntegrationHub />
+            </div>
+          </section>
+        );
+      case "premium":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <PremiumFeatures />
+            </div>
+          </section>
+        );
+      case "trainers":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <TrainerConnection />
             </div>
           </section>
         );
