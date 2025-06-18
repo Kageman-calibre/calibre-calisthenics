@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, Calendar, Target, Zap, BarChart3, PieChart } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
 
 interface AnalyticsData {
   workoutFrequency: Array<{ date: string; workouts: number }>;
@@ -142,11 +142,17 @@ const AnalyticsDashboard = () => {
           <ChartContainer config={chartConfig} className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <RechartsPieChart>
-                <RechartsPieChart data={analyticsData.bodyComposition} cx="50%" cy="50%" outerRadius={80} fill="#8884d8">
+                <Pie
+                  data={analyticsData.bodyComposition}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  dataKey="value"
+                >
                   {analyticsData.bodyComposition.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
-                </RechartsPieChart>
+                </Pie>
                 <ChartTooltip content={<ChartTooltipContent />} />
               </RechartsPieChart>
             </ResponsiveContainer>
