@@ -78,7 +78,7 @@ const MobileFeatures = () => {
         }
       }
     }
-  }, [hapticEnabled]);
+  }, [hapticEnabled, stopCamera]);
 
   // Push notifications
   const enableNotifications = useCallback(async () => {
@@ -232,14 +232,13 @@ const MobileFeatures = () => {
                   if (navigator.share) {
                     navigator.share({
                       title: 'My Fitness Progress',
-                      text: 'Check out my workout progress!',
-                      files: [new File([photoTaken], 'progress.jpg', { type: 'image/jpeg' })]
+                      text: 'Check out my workout progress!'
                     });
                   } else {
                     alert('Sharing not supported, but photo is saved to your workout history!');
                   }
                 }}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg inline-flex items-center"
               >
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
@@ -339,7 +338,7 @@ const MobileFeatures = () => {
           <button
             onClick={() => {
               const audio = new Audio();
-              audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+LyvGQdAzeL1O/SeToGHm3A7N6XRAsOUaPg8MljHgU+ltryxnkpBSl+zvLZiTUIG2m98OScTwwOVqfg8LNmHAU4kdX1zXwsTyFz'};
+              audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+LyvGQdAzeL1O/SeToGHm3A7N6XRAsOUaPg8MljHgU+ltryxnkpBSl+zvLZiTUIG2m98OScTwwOVqfg8LNmHAU4kdX1zXwsTyFz';
               audio.play().catch(() => console.log('Audio play failed'));
               triggerHaptic(50);
             }}
