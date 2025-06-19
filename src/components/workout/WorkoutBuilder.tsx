@@ -71,6 +71,16 @@ const WorkoutBuilder = ({ onSave }: { onSave?: () => void }) => {
       return sum + (ex.sets * 2) + (restTime * (ex.sets - 1) / 60); // Rough estimate
     }, 0);
 
+    // Convert exercises to proper JSON format for Supabase
+    const exerciseData = exercises.map(ex => ({
+      id: ex.id,
+      name: ex.name,
+      sets: ex.sets,
+      reps: ex.reps,
+      restTime: ex.restTime,
+      description: ex.description
+    }));
+
     const { error } = await supabase
       .from('workout_programs')
       .insert({
@@ -79,11 +89,12 @@ const WorkoutBuilder = ({ onSave }: { onSave?: () => void }) => {
         description,
         difficulty,
         duration_minutes: Math.round(totalDuration),
-        exercises: exercises,
+        exercises: exerciseData as any, // Type assertion for Json compatibility
         is_public: isPublic
       });
 
     if (error) {
+      console.error('Error saving workout:', error);
       toast({
         title: "Error",
         description: "Failed to save workout program.",

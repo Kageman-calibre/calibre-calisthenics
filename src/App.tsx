@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Programs from "./pages/Programs";
 import ProgramDetailPage from "./pages/ProgramDetailPage";
 import WorkoutDetailPage from "./pages/WorkoutDetailPage";
+import WorkoutBuilderPage from "./pages/WorkoutBuilderPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const AppContent = () => {
         <Route path="/programs" element={<Programs />} />
         <Route path="/program/:id" element={<ProgramDetailPage />} />
         <Route path="/workout/:id" element={<WorkoutDetailPage />} />
+        <Route path="/studio" element={<WorkoutBuilderPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
