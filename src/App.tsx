@@ -14,7 +14,7 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const AppContent = () => {
+const AppRoutes = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -30,27 +30,27 @@ const AppContent = () => {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/programs" element={<Programs />} />
-        <Route path="/program/:id" element={<ProgramDetailPage />} />
-        <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-        <Route path="/studio" element={<WorkoutBuilderPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/programs" element={<Programs />} />
+      <Route path="/program/:id" element={<ProgramDetailPage />} />
+      <Route path="/workout/:id" element={<WorkoutDetailPage />} />
+      <Route path="/studio" element={<WorkoutBuilderPage />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </TooltipProvider>
+    <AuthProvider>
+      <BrowserRouter>
+        <TooltipProvider>
+          <Toaster />
+          <AppRoutes />
+        </TooltipProvider>
+      </BrowserRouter>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
