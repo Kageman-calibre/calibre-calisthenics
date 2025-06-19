@@ -43,30 +43,167 @@ export type Database = {
       }
       profiles: {
         Row: {
+          age: number | null
           avatar_background: string | null
           avatar_badges: string[] | null
           avatar_url: string | null
           created_at: string | null
+          fitness_level: string | null
+          full_name: string | null
+          goals: string[] | null
           id: string
+          updated_at: string | null
           username: string | null
         }
         Insert: {
+          age?: number | null
           avatar_background?: string | null
           avatar_badges?: string[] | null
           avatar_url?: string | null
           created_at?: string | null
+          fitness_level?: string | null
+          full_name?: string | null
+          goals?: string[] | null
           id: string
+          updated_at?: string | null
           username?: string | null
         }
         Update: {
+          age?: number | null
           avatar_background?: string | null
           avatar_badges?: string[] | null
           avatar_url?: string | null
           created_at?: string | null
+          fitness_level?: string | null
+          full_name?: string | null
+          goals?: string[] | null
           id?: string
+          updated_at?: string | null
           username?: string | null
         }
         Relationships: []
+      }
+      user_stats: {
+        Row: {
+          created_at: string
+          current_streak: number | null
+          id: string
+          last_workout_date: string | null
+          longest_streak: number | null
+          total_calories: number | null
+          total_minutes: number | null
+          total_workouts: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_streak?: number | null
+          id?: string
+          last_workout_date?: string | null
+          longest_streak?: number | null
+          total_calories?: number | null
+          total_minutes?: number | null
+          total_workouts?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_streak?: number | null
+          id?: string
+          last_workout_date?: string | null
+          longest_streak?: number | null
+          total_calories?: number | null
+          total_minutes?: number | null
+          total_workouts?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workout_programs: {
+        Row: {
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          duration_minutes: number | null
+          exercises: Json
+          id: string
+          is_public: boolean | null
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          exercises?: Json
+          id?: string
+          is_public?: boolean | null
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          exercises?: Json
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workout_sessions: {
+        Row: {
+          calories_burned: number | null
+          completed_at: string
+          difficulty: string | null
+          duration_minutes: number
+          exercises: string[]
+          id: string
+          program_id: string | null
+          program_name: string
+          user_id: string
+        }
+        Insert: {
+          calories_burned?: number | null
+          completed_at?: string
+          difficulty?: string | null
+          duration_minutes: number
+          exercises: string[]
+          id?: string
+          program_id?: string | null
+          program_name: string
+          user_id: string
+        }
+        Update: {
+          calories_burned?: number | null
+          completed_at?: string
+          difficulty?: string | null
+          duration_minutes?: number
+          exercises?: string[]
+          id?: string
+          program_id?: string | null
+          program_name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_sessions_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "workout_programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

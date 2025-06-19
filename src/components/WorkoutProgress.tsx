@@ -1,67 +1,65 @@
 
 import { useState, useEffect } from 'react';
 import { Calendar, TrendingUp, Target, Clock, Flame, Award } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 interface WorkoutSession {
   id: string;
-  date: string;
+  program_name: string;
   exercises: string[];
-  duration: number;
-  calories: number;
+  duration_minutes: number;
+  calories_burned: number;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  completed_at: string;
+}
+
+interface UserStats {
+  total_workouts: number;
+  total_minutes: number;
+  total_calories: number;
+  current_streak: number;
 }
 
 const WorkoutProgress = () => {
   const [workoutHistory, setWorkoutHistory] = useState<WorkoutSession[]>([]);
-  const [currentStreak, setCurrentStreak] = useState(0);
-  const [totalWorkouts, setTotalWorkouts] = useState(0);
-  const [totalMinutes, setTotalMinutes] = useState(0);
-  const [totalCalories, setTotalCalories] = useState(0);
+  const [userStats, setUserStats] = useState<UserStats>({
+    total_workouts: 0,
+    total_minutes: 0,
+    total_calories: 0,
+    current_streak: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-  // Load data from localStorage on component mount
   useEffect(() => {
-    const savedHistory = localStorage.getItem('workoutHistory');
-    if (savedHistory) {
-      const history = JSON.parse(savedHistory);
-      setWorkoutHistory(history);
-      calculateStats(history);
+    if (user) {
+      fetchWorkoutData();
     }
+  }, [user]);
 
-    // Listen for workout updates
-    const handleWorkoutAdded = () => {
-      const updatedHistory = localStorage.getItem('workoutHistory');
-      if (updatedHistory) {
-        const history = JSON.parse(updatedHistory);
-        setWorkoutHistory(history);
-        calculateStats(history);
-      }
-    };
+  const fetchWorkoutData = async () => {
+    if (!user) return;
 
-    window.addEventListener('workoutAdded', handleWorkoutAdded);
-    return () => window.removeEventListener('workoutAdded', handleWorkoutAdded);
-  }, []);
+    // Fetch workout sessions
+    const { data: sessions } = await supabase
+      .from('workout_sessions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('completed_at', { ascending: false })
+      .limit(10);
 
-  const calculateStats = (history: WorkoutSession[]) => {
-    setTotalWorkouts(history.length);
-    setTotalMinutes(history.reduce((sum, session) => sum + session.duration, 0));
-    setTotalCalories(history.reduce((sum, session) => sum + session.calories, 0));
+    // Fetch user stats
+    const { data: stats } = await supabase
+      .from('user_stats')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+
+    if (sessions) setWorkoutHistory(sessions);
+    if (stats) setUserStats(stats);
     
-    // Calculate streak
-    let streak = 0;
-    const today = new Date();
-    const sortedHistory = [...history].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    
-    for (let i = 0; i < sortedHistory.length; i++) {
-      const sessionDate = new Date(sortedHistory[i].date);
-      const daysDiff = Math.floor((today.getTime() - sessionDate.getTime()) / (1000 * 60 * 60 * 24));
-      
-      if (daysDiff === i) {
-        streak++;
-      } else {
-        break;
-      }
-    }
-    setCurrentStreak(streak);
+    setLoading(false);
   };
 
   const getWeeklyProgress = () => {
@@ -69,7 +67,7 @@ const WorkoutProgress = () => {
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     
     const thisWeek = workoutHistory.filter(session => 
-      new Date(session.date) >= oneWeekAgo
+      new Date(session.completed_at) >= oneWeekAgo
     );
     
     return thisWeek.length;
@@ -80,53 +78,54 @@ const WorkoutProgress = () => {
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
     
     const thisMonth = workoutHistory.filter(session => 
-      new Date(session.date) >= oneMonthAgo
+      new Date(session.completed_at) >= oneMonthAgo
     );
     
     return thisMonth.length;
   };
 
+  if (loading) {
+    return <div className="text-white">Loading your progress...</div>;
+  }
+
   const stats = [
     { 
       icon: Flame, 
       label: "Current Streak", 
-      value: `${currentStreak} days`, 
+      value: `${userStats.current_streak} days`, 
       color: "text-orange-400",
       bgColor: "bg-orange-500/10 border-orange-500/20"
     },
     { 
       icon: Target, 
       label: "Total Workouts", 
-      value: totalWorkouts.toString(), 
+      value: userStats.total_workouts.toString(), 
       color: "text-blue-400",
       bgColor: "bg-blue-500/10 border-blue-500/20"
     },
     { 
       icon: Clock, 
       label: "Total Time", 
-      value: `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`, 
+      value: `${Math.floor(userStats.total_minutes / 60)}h ${userStats.total_minutes % 60}m`, 
       color: "text-green-400",
       bgColor: "bg-green-500/10 border-green-500/20"
     },
     { 
       icon: TrendingUp, 
       label: "Calories Burned", 
-      value: totalCalories.toString(), 
+      value: userStats.total_calories.toString(), 
       color: "text-purple-400",
       bgColor: "bg-purple-500/10 border-purple-500/20"
     }
   ];
 
-  const recentWorkouts = workoutHistory
-    .slice(-5)
-    .reverse()
-    .map(session => ({
-      ...session,
-      formattedDate: new Date(session.date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      })
-    }));
+  const recentWorkouts = workoutHistory.slice(0, 5).map(session => ({
+    ...session,
+    formattedDate: new Date(session.completed_at).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
+    })
+  }));
 
   return (
     <div className="space-y-8">
@@ -206,10 +205,10 @@ const WorkoutProgress = () => {
               >
                 <div>
                   <p className="text-white font-medium">
-                    {workout.exercises.length} exercises
+                    {workout.program_name}
                   </p>
                   <p className="text-gray-400 text-sm">
-                    {workout.formattedDate} • {workout.duration} min • {workout.calories} cal
+                    {workout.formattedDate} • {workout.duration_minutes} min • {workout.calories_burned} cal
                   </p>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -232,20 +231,31 @@ export default WorkoutProgress;
 
 // Export the function to add workout sessions so other components can use it
 export const useWorkoutProgress = () => {
-  const addWorkoutSession = (session: Omit<WorkoutSession, 'id'>) => {
-    const newSession = {
-      ...session,
-      id: Date.now().toString()
-    };
-    
-    const savedHistory = localStorage.getItem('workoutHistory');
-    const history = savedHistory ? JSON.parse(savedHistory) : [];
-    const updatedHistory = [...history, newSession];
-    
-    localStorage.setItem('workoutHistory', JSON.stringify(updatedHistory));
-    
-    // Trigger a custom event to update other components
-    window.dispatchEvent(new CustomEvent('workoutAdded', { detail: newSession }));
+  const { user } = useAuth();
+
+  const addWorkoutSession = async (session: {
+    exercises: string[];
+    duration: number;
+    calories: number;
+    difficulty: 'beginner' | 'intermediate' | 'advanced';
+    programName?: string;
+  }) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('workout_sessions')
+      .insert({
+        user_id: user.id,
+        program_name: session.programName || 'Quick Workout',
+        exercises: session.exercises,
+        duration_minutes: session.duration,
+        calories_burned: session.calories,
+        difficulty: session.difficulty
+      });
+
+    if (error) {
+      console.error('Error saving workout session:', error);
+    }
   };
 
   return { addWorkoutSession };

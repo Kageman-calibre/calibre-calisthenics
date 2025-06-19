@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getExerciseById } from "../data/exerciseDatabase";
 import ExerciseCard from "./ExerciseCard";
-import WorkoutTimer from "./WorkoutTimer";
+import EnhancedWorkoutTimer from "./timer/EnhancedWorkoutTimer";
 import WorkoutControls from "./WorkoutControls";
 import ExerciseProgress from "./ExerciseProgress";
 import WorkoutNavigation from "./WorkoutNavigation";
@@ -47,17 +47,17 @@ const WorkoutDetail = () => {
     }
   };
 
-  const handleWorkoutComplete = () => {
+  const handleWorkoutComplete = async () => {
     if (workoutStartTime) {
       const duration = Math.floor((new Date().getTime() - workoutStartTime.getTime()) / (1000 * 60));
       const totalCalories = exercises.reduce((sum, ex) => sum + ex.calories, 0);
       
-      addWorkoutSession({
-        date: new Date().toISOString(),
+      await addWorkoutSession({
         exercises: exercises.map(ex => ex.name),
         duration,
         calories: totalCalories,
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
+        programName: 'Default Workout'
       });
     }
   };
@@ -127,14 +127,12 @@ const WorkoutDetail = () => {
           <div className="space-y-8">
             {/* Timer */}
             {isResting ? (
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-4">Rest Time</h3>
-                <WorkoutTimer
-                  initialTime={getRestTime(currentExercise)}
-                  onComplete={handleTimerComplete}
-                  autoStart={true}
-                />
-              </div>
+              <EnhancedWorkoutTimer
+                initialTime={getRestTime(currentExercise)}
+                onComplete={handleTimerComplete}
+                autoStart={true}
+                title="Rest Time"
+              />
             ) : (
               <WorkoutControls
                 currentSet={currentSet}
