@@ -7,10 +7,11 @@ import Navigation from '@/components/Navigation';
 
 const WorkoutBuilderPage = () => {
   const [activeTab, setActiveTab] = useState('builder');
+  const [activeSection, setActiveSection] = useState('workouts');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <Navigation />
+      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
