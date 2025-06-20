@@ -41,6 +41,62 @@ export type Database = {
           },
         ]
       }
+      exercise_performance: {
+        Row: {
+          difficulty_rating: number | null
+          exercise_id: string
+          exercise_name: string
+          form_rating: number | null
+          id: string
+          notes: string | null
+          performed_at: string
+          reps_completed: number[] | null
+          rest_times: number[] | null
+          sets_completed: number
+          user_id: string
+          weights_used: number[] | null
+          workout_session_id: string | null
+        }
+        Insert: {
+          difficulty_rating?: number | null
+          exercise_id: string
+          exercise_name: string
+          form_rating?: number | null
+          id?: string
+          notes?: string | null
+          performed_at?: string
+          reps_completed?: number[] | null
+          rest_times?: number[] | null
+          sets_completed: number
+          user_id: string
+          weights_used?: number[] | null
+          workout_session_id?: string | null
+        }
+        Update: {
+          difficulty_rating?: number | null
+          exercise_id?: string
+          exercise_name?: string
+          form_rating?: number | null
+          id?: string
+          notes?: string | null
+          performed_at?: string
+          reps_completed?: number[] | null
+          rest_times?: number[] | null
+          sets_completed?: number
+          user_id?: string
+          weights_used?: number[] | null
+          workout_session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_performance_workout_session_id_fkey"
+            columns: ["workout_session_id"]
+            isOneToOne: false
+            referencedRelation: "workout_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           age: number | null
@@ -82,6 +138,104 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      recovery_metrics: {
+        Row: {
+          created_at: string
+          date: string
+          energy_level: number | null
+          heart_rate_variability: number | null
+          id: string
+          muscle_soreness: number | null
+          notes: string | null
+          resting_heart_rate: number | null
+          sleep_hours: number | null
+          sleep_quality: number | null
+          stress_level: number | null
+          user_id: string
+          workout_readiness: number | null
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          energy_level?: number | null
+          heart_rate_variability?: number | null
+          id?: string
+          muscle_soreness?: number | null
+          notes?: string | null
+          resting_heart_rate?: number | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          user_id: string
+          workout_readiness?: number | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          energy_level?: number | null
+          heart_rate_variability?: number | null
+          id?: string
+          muscle_soreness?: number | null
+          notes?: string | null
+          resting_heart_rate?: number | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          user_id?: string
+          workout_readiness?: number | null
+        }
+        Relationships: []
+      }
+      training_cycles: {
+        Row: {
+          created_at: string
+          cycle_type: string
+          end_date: string
+          id: string
+          intensity_multiplier: number
+          is_deload: boolean
+          phase: string
+          program_id: string | null
+          start_date: string
+          user_id: string
+          volume_multiplier: number
+        }
+        Insert: {
+          created_at?: string
+          cycle_type: string
+          end_date: string
+          id?: string
+          intensity_multiplier?: number
+          is_deload?: boolean
+          phase: string
+          program_id?: string | null
+          start_date: string
+          user_id: string
+          volume_multiplier?: number
+        }
+        Update: {
+          created_at?: string
+          cycle_type?: string
+          end_date?: string
+          id?: string
+          intensity_multiplier?: number
+          is_deload?: boolean
+          phase?: string
+          program_id?: string | null
+          start_date?: string
+          user_id?: string
+          volume_multiplier?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_cycles_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "workout_programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_stats: {
         Row: {
@@ -125,11 +279,15 @@ export type Database = {
       workout_programs: {
         Row: {
           created_at: string
+          current_week: number
           description: string | null
           difficulty: string | null
           duration_minutes: number | null
+          duration_weeks: number
           exercises: Json
+          focus_type: string
           id: string
+          is_active: boolean
           is_public: boolean | null
           name: string
           updated_at: string
@@ -137,11 +295,15 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          current_week?: number
           description?: string | null
           difficulty?: string | null
           duration_minutes?: number | null
+          duration_weeks?: number
           exercises?: Json
+          focus_type?: string
           id?: string
+          is_active?: boolean
           is_public?: boolean | null
           name: string
           updated_at?: string
@@ -149,11 +311,15 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          current_week?: number
           description?: string | null
           difficulty?: string | null
           duration_minutes?: number | null
+          duration_weeks?: number
           exercises?: Json
+          focus_type?: string
           id?: string
+          is_active?: boolean
           is_public?: boolean | null
           name?: string
           updated_at?: string
@@ -210,7 +376,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_recovery_score: {
+        Args: { p_user_id: string; p_date?: string }
+        Returns: number
+      }
+      suggest_progressive_overload: {
+        Args: {
+          p_user_id: string
+          p_exercise_id: string
+          p_target_reps?: number
+        }
+        Returns: {
+          suggested_weight: number
+          suggested_reps: number
+          progression_type: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
