@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Menu, X, Dumbbell, User, BarChart3, Users, Apple, Zap, BookOpen, Smartphone, Settings, Crown } from "lucide-react";
+import { Menu, X, Dumbbell, User, BarChart3, Users, Apple, Zap, BookOpen, Smartphone, Settings, Crown, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "./auth/AuthProvider";
 
@@ -15,6 +15,7 @@ const Navigation = ({ activeSection, setActiveSection }: NavigationProps) => {
 
   const navigationItems = [
     { id: "home", label: "Home", icon: Dumbbell },
+    { id: "exercises", label: "Exercises", icon: Target },
     { id: "templates", label: "Templates", icon: BookOpen },
     { id: "workouts", label: "Workouts", icon: Zap },
     { id: "progress", label: "Progress", icon: BarChart3 },

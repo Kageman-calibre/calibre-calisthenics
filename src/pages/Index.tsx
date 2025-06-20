@@ -18,6 +18,7 @@ import IntegrationHub from "../components/integrations/IntegrationHub";
 import PremiumFeatures from "../components/premium/PremiumFeatures";
 import TrainerConnection from "../components/social/TrainerConnection";
 import WorkoutTemplates from "../components/templates/WorkoutTemplates";
+import ExerciseLibrary from "../components/exercise/ExerciseLibrary";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
@@ -47,6 +48,14 @@ const Index = () => {
             <FeaturedExercises />
             <TrainingSchedules />
           </>
+        );
+      case "exercises":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <ExerciseLibrary />
+            </div>
+          </section>
         );
       case "templates":
         return (
