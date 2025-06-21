@@ -57,24 +57,24 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-slate-800/50 backdrop-blur-lg border-slate-700">
+    <div className="min-h-screen gradient-black-burgundy flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-black/50 backdrop-blur-lg border-gold/20">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-full">
-              <Dumbbell className="h-8 w-8 text-white" />
+            <div className="p-3 gradient-gold-burgundy rounded-full">
+              <Dumbbell className="h-8 w-8 text-black" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-white">Calisthenics Prime</CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardTitle className="text-2xl font-bold text-gold tracking-wider">CALIBRE</CardTitle>
+          <CardDescription className="text-white/80">
             Welcome to your fitness journey
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-slate-700">
-              <TabsTrigger value="signin" className="text-white">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="text-white">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-black/50 border border-gold/20">
+              <TabsTrigger value="signin" className="text-white data-[state=active]:bg-gold data-[state=active]:text-black">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="text-white data-[state=active]:bg-gold data-[state=active]:text-black">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
@@ -86,7 +86,7 @@ const AuthPage = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white"
+                    className="bg-black/30 border-gold/20 text-white focus:border-gold"
                     required
                   />
                 </div>
@@ -97,13 +97,13 @@ const AuthPage = () => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white"
+                    className="bg-black/30 border-gold/20 text-white focus:border-gold"
                     required
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="w-full gradient-gold-burgundy text-black hover:opacity-90 font-bold"
                   disabled={loading}
                 >
                   {loading ? 'Signing In...' : 'Sign In'}
@@ -120,7 +120,7 @@ const AuthPage = () => {
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white"
+                    className="bg-black/30 border-gold/20 text-white focus:border-gold"
                     required
                   />
                 </div>
@@ -131,7 +131,7 @@ const AuthPage = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white"
+                    className="bg-black/30 border-gold/20 text-white focus:border-gold"
                     required
                   />
                 </div>
@@ -142,14 +142,14 @@ const AuthPage = () => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white"
+                    className="bg-black/30 border-gold/20 text-white focus:border-gold"
                     minLength={6}
                     required
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="w-full gradient-gold-burgundy text-black hover:opacity-90 font-bold"
                   disabled={loading}
                 >
                   {loading ? 'Creating Account...' : 'Create Account'}

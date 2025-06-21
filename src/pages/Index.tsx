@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Hero from "../components/Hero";
 import WorkoutCategories from "../components/WorkoutCategories";
@@ -195,7 +196,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen gradient-black-burgundy">
       <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
       
       <main>

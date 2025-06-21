@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -33,12 +34,12 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
   ];
 
   return (
-    <header className="bg-slate-900/80 backdrop-blur-md fixed top-0 left-0 w-full z-50">
+    <header className="bg-black/95 backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-gold/20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="text-white font-bold text-xl">
-            FitnessAI
+          <Link to="/" className="text-gold font-bold text-2xl tracking-wider">
+            CALIBRE
           </Link>
 
           {/* Desktop Navigation */}
@@ -47,7 +48,7 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
               <Link
                 key={item.id}
                 to="/"
-                className={`text-gray-300 hover:text-white transition-colors ${activeSection === item.id ? "text-white" : ""}`}
+                className={`text-white hover:text-gold transition-colors font-medium ${activeSection === item.id ? "text-gold" : ""}`}
                 onClick={() => {
                   setActiveSection(item.id);
                 }}
@@ -59,19 +60,19 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
 
           {/* Mobile Button */}
           <div className="md:hidden">
-            <button onClick={toggleMenu} className="text-gray-300 hover:text-white focus:outline-none focus:text-white">
+            <button onClick={toggleMenu} className="text-white hover:text-gold focus:outline-none focus:text-gold">
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
           {/* Profile Section */}
           <div className="hidden md:flex items-center space-x-4">
-            <span className="text-gray-300">
+            <span className="text-white font-medium">
               {user?.email ? user.email : "Guest"}
             </span>
             <button
               onClick={signOut}
-              className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors"
+              className="bg-burgundy hover:bg-burgundy/80 text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >
               Logout
             </button>
@@ -81,13 +82,13 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden">
+        <div className="md:hidden bg-black/95 backdrop-blur-md border-t border-gold/20">
           <nav className="px-4 py-3">
             {navItems.map((item) => (
               <Link
                 key={item.id}
                 to="/"
-                className={`block text-gray-300 hover:text-white py-2 transition-colors ${activeSection === item.id ? "text-white" : ""}`}
+                className={`block text-white hover:text-gold py-3 transition-colors font-medium ${activeSection === item.id ? "text-gold" : ""}`}
                 onClick={() => {
                   setActiveSection(item.id);
                   closeMenu();
@@ -101,7 +102,7 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
                 signOut();
                 closeMenu();
               }}
-              className="block bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors mt-3 w-full text-center"
+              className="block bg-burgundy hover:bg-burgundy/80 text-white font-medium py-2 px-4 rounded-lg transition-colors mt-3 w-full text-center"
             >
               Logout
             </button>
