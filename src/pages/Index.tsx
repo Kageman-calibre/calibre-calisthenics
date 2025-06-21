@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Hero from "../components/Hero";
 import WorkoutCategories from "../components/WorkoutCategories";
@@ -20,6 +21,7 @@ import WorkoutTemplates from "../components/templates/WorkoutTemplates";
 import ExerciseLibrary from "../components/exercise/ExerciseLibrary";
 import SmartProgramming from "../components/programming/SmartProgramming";
 import AIDashboard from "../components/ai/AIDashboard";
+import GameDashboard from "../components/gamification/GameDashboard";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
@@ -99,6 +101,14 @@ const Index = () => {
           <section className="py-20 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <SocialHub />
+            </div>
+          </section>
+        );
+      case "gamification":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <GameDashboard />
             </div>
           </section>
         );
