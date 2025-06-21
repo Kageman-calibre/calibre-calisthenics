@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -21,8 +19,10 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
     { id: "home", label: "Home" },
     { id: "workouts", label: "Workouts" },
     { id: "exercises", label: "Exercises" },
+    { id: "skills", label: "Skills" },
     { id: "templates", label: "Templates" },
     { id: "programming", label: "Programming" },
+    { id: "intelligence", label: "Intelligence" },
     { id: "progress", label: "Progress" },
     { id: "analytics", label: "Analytics" },
     { id: "ai", label: "AI Insights" },

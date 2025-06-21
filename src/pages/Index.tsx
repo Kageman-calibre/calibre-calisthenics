@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Hero from "../components/Hero";
 import WorkoutCategories from "../components/WorkoutCategories";
@@ -24,6 +23,8 @@ import AIDashboard from "../components/ai/AIDashboard";
 import GameDashboard from "../components/gamification/GameDashboard";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+import SmartWorkoutIntelligence from "../components/intelligence/SmartWorkoutIntelligence";
+import SkillMastery from "../components/skills/SkillMastery";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -160,10 +161,31 @@ const Index = () => {
             </div>
           </section>
         );
+      case "skills":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <SkillMastery />
+            </div>
+          </section>
+        );
+      case "intelligence":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <SmartWorkoutIntelligence />
+            </div>
+          </section>
+        );
       default:
         return (
           <>
             <Hero />
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <WorkoutTemplates />
+              </div>
+            </section>
             <WorkoutCategories />
             <FeaturedExercises />
             <TrainingSchedules />
