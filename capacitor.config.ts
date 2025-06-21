@@ -2,18 +2,39 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.65464b3be42f43d4bbc37e45385459d5',
-  appName: 'lean-body-blueprint',
+  appId: 'com.calibre.fitness',
+  appName: 'Calibre',
   webDir: 'dist',
   server: {
-    url: 'https://65464b3b-e42f-43d4-bbc3-7e45385459d5.lovableproject.com?forceHideBadge=true',
-    cleartext: true
+    androidScheme: 'https'
   },
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,
-      backgroundColor: '#1e293b',
-      showSpinner: false
+      backgroundColor: '#000000',
+      showSpinner: false,
+      androidSplashResourceName: 'splash',
+      androidScaleType: 'CENTER_CROP',
+      splashFullScreen: true,
+      splashImmersive: true
+    },
+    StatusBar: {
+      backgroundColor: '#000000',
+      style: 'LIGHT'
+    },
+    Keyboard: {
+      resize: 'body',
+      style: 'DARK',
+      resizeOnFullScreen: true
+    }
+  },
+  android: {
+    buildOptions: {
+      keystorePath: undefined,
+      keystorePassword: undefined,
+      keystoreAlias: undefined,
+      keystoreAliasPassword: undefined,
+      releaseType: 'AAB'
     }
   }
 };
