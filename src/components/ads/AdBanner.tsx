@@ -15,7 +15,7 @@ const AdBanner = ({ position = 'bottom', size = 'banner', className = '' }: AdBa
   const [adContent, setAdContent] = useState<string>('');
 
   useEffect(() => {
-    // Simulera laddning av annons
+    // Simulate ad loading
     const loadAd = setTimeout(() => {
       setIsLoading(false);
       setAdContent(generateSampleAd());
@@ -26,11 +26,11 @@ const AdBanner = ({ position = 'bottom', size = 'banner', className = '' }: AdBa
 
   const generateSampleAd = () => {
     const ads = [
-      "🏋️ Bästa träningsutrustningen - 30% rabatt!",
-      "💪 Proteinpulver för styrketräning - Köp nu!",
-      "🥗 Hälsosam måltidsplanering - Prova gratis!",
-      "⌚ Smartwatch för träning - Ny modell ute nu!",
-      "🏃 Löparskor för alla terranger - Se utbudet!"
+      "🏋️ Best Training Equipment - 30% Off!",
+      "💪 Protein Powder for Strength Training - Buy Now!",
+      "🥗 Healthy Meal Planning - Try Free!",
+      "⌚ Smartwatch for Training - New Model Available!",
+      "🏃 Running Shoes for All Terrains - See Selection!"
     ];
     return ads[Math.floor(Math.random() * ads.length)];
   };
@@ -76,12 +76,12 @@ const AdBanner = ({ position = 'bottom', size = 'banner', className = '' }: AdBa
           {isLoading ? (
             <div className="flex items-center space-x-3 flex-1">
               <RefreshCw className="h-4 w-4 text-gray-400 animate-spin" />
-              <span className="text-gray-400 text-sm">Laddar annons...</span>
+              <span className="text-gray-400 text-sm">Loading ad...</span>
             </div>
           ) : (
             <div className="flex items-center space-x-4 flex-1">
               <div className="bg-gold/20 px-2 py-1 rounded text-xs text-gold font-medium">
-                ANNONS
+                AD
               </div>
               <p className="text-white text-sm flex-1 truncate">{adContent}</p>
               <Button
@@ -89,7 +89,7 @@ const AdBanner = ({ position = 'bottom', size = 'banner', className = '' }: AdBa
                 variant="outline"
                 className="hidden sm:inline-flex border-gold/30 text-gold hover:bg-gold/10"
               >
-                Läs mer
+                Learn More
               </Button>
             </div>
           )}

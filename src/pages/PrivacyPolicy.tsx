@@ -13,128 +13,128 @@ const PrivacyPolicy = () => {
             className="inline-flex items-center text-gold hover:text-gold/80 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Tillbaka till startsidan
+            Back to Home
           </Link>
         </div>
 
         <Card className="bg-black/50 backdrop-blur-lg border-gold/20">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold text-gold">Integritetspolicy</CardTitle>
-            <p className="text-white/80">Senast uppdaterad: {new Date().toLocaleDateString('sv-SE')}</p>
+            <CardTitle className="text-3xl font-bold text-gold">Privacy Policy</CardTitle>
+            <p className="text-white/80">Last updated: {new Date().toLocaleDateString('en-US')}</p>
           </CardHeader>
           <CardContent className="space-y-6 text-white/90">
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">1. Information vi samlar in</h2>
+              <h2 className="text-2xl font-semibold text-gold mb-3">1. Information We Collect</h2>
               <div className="space-y-3">
-                <h3 className="text-lg font-medium text-white">Kontoinformation:</h3>
+                <h3 className="text-lg font-medium text-white">Account Information:</h3>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>E-postadress</li>
-                  <li>Användarnamn</li>
-                  <li>Profilinformation som du tillhandahåller</li>
+                  <li>Email address</li>
+                  <li>Username</li>
+                  <li>Profile information you provide</li>
                 </ul>
                 
-                <h3 className="text-lg font-medium text-white">Träningsdata:</h3>
+                <h3 className="text-lg font-medium text-white">Workout Data:</h3>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Träningsdata och framsteg</li>
-                  <li>Övningspreferenser</li>
-                  <li>Appanvändningsanalys</li>
-                  <li>Enhetsinformation</li>
+                  <li>Training data and progress</li>
+                  <li>Exercise preferences</li>
+                  <li>App usage analytics</li>
+                  <li>Device information</li>
                 </ul>
                 
-                <h3 className="text-lg font-medium text-white">Valfri information:</h3>
+                <h3 className="text-lg font-medium text-white">Optional Information:</h3>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Framstegsfoton (lagras lokalt)</li>
-                  <li>Kroppsmått</li>
-                  <li>Träningsmål</li>
+                  <li>Progress photos (stored locally)</li>
+                  <li>Body measurements</li>
+                  <li>Training goals</li>
                 </ul>
               </div>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">2. Hur vi använder din information</h2>
-              <p className="mb-3">Vi använder insamlad information för att:</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">2. How We Use Your Information</h2>
+              <p className="mb-3">We use collected information to:</p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Ge personliga träningsrekommendationer</li>
-                <li>Spåra dina framsteg inom träning</li>
-                <li>Förbättra appens funktionalitet</li>
-                <li>Skicka viktiga appuppdateringar</li>
-                <li>Tillhandahålla kundsupport</li>
-                <li>Visa relevanta annonser för att stödja appen</li>
+                <li>Provide personalized workout recommendations</li>
+                <li>Track your fitness progress</li>
+                <li>Improve app functionality</li>
+                <li>Send important app updates</li>
+                <li>Provide customer support</li>
+                <li>Show relevant ads to support the app</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">3. Datadelning</h2>
-              <p className="mb-3">Vi säljer, handlar eller delar INTE din personliga information med tredje parter förutom:</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">3. Data Sharing</h2>
+              <p className="mb-3">We do NOT sell, trade, or share your personal information with third parties except:</p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>När det krävs enligt lag</li>
-                <li>För att skydda våra rättigheter och säkerhet</li>
-                <li>Med ditt uttryckliga samtycke</li>
-                <li>Med annonspartners för att visa relevanta annonser (anonymiserad data)</li>
+                <li>When required by law</li>
+                <li>To protect our rights and safety</li>
+                <li>With your explicit consent</li>
+                <li>With advertising partners to show relevant ads (anonymized data)</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">4. Datasäkerhet</h2>
-              <p className="mb-3">Vi implementerar lämpliga säkerhetsåtgärder för att skydda din personliga information:</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">4. Data Security</h2>
+              <p className="mb-3">We implement appropriate security measures to protect your personal information:</p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Krypterad dataöverföring</li>
-                <li>Säkra servrar</li>
-                <li>Regelbundna säkerhetsrevisioner</li>
-                <li>Begränsade åtkomstkontroller</li>
+                <li>Encrypted data transmission</li>
+                <li>Secure servers</li>
+                <li>Regular security audits</li>
+                <li>Limited access controls</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">5. Dina rättigheter</h2>
-              <p className="mb-3">Du har rätt att:</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">5. Your Rights</h2>
+              <p className="mb-3">You have the right to:</p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Få tillgång till dina personuppgifter</li>
-                <li>Korrigera felaktig information</li>
-                <li>Radera ditt konto och data</li>
-                <li>Exportera dina data</li>
-                <li>Välja bort kommunikation</li>
-                <li>Kontrollera annonsinställningar</li>
+                <li>Access your personal data</li>
+                <li>Correct inaccurate information</li>
+                <li>Delete your account and data</li>
+                <li>Export your data</li>
+                <li>Opt out of communications</li>
+                <li>Control ad settings</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">6. Databevarande</h2>
-              <p className="mb-3">Vi behåller dina data:</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">6. Data Retention</h2>
+              <p className="mb-3">We retain your data:</p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Kontodata: Tills kontot raderas</li>
-                <li>Användningsdata: Maximalt 2 år</li>
-                <li>Analysdata: Anonymiseras efter 1 år</li>
+                <li>Account data: Until account deletion</li>
+                <li>Usage data: Maximum 2 years</li>
+                <li>Analytics data: Anonymized after 1 year</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">7. Annonser</h2>
-              <p className="mb-3">Calibre använder annonser för att hålla appen gratis. Vi arbetar med betrodda annonspartners som Google AdMob för att visa relevanta annonser. Annonspartners kan använda cookies och liknande teknologier för att:</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">7. Advertising</h2>
+              <p className="mb-3">Calibre uses advertising to keep the app free. We work with trusted advertising partners like Google AdMob to show relevant ads. Advertising partners may use cookies and similar technologies to:</p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Visa personaliserade annonser baserat på dina intressen</li>
-                <li>Mäta annonseffektivitet</li>
-                <li>Förbättra annonsupplevelsen</li>
+                <li>Show personalized ads based on your interests</li>
+                <li>Measure ad effectiveness</li>
+                <li>Improve ad experience</li>
               </ul>
-              <p className="mt-3">Du kan justera dina annonsinställningar i enhetens inställningar eller genom att kontakta oss.</p>
+              <p className="mt-3">You can adjust your ad settings in your device settings or by contacting us.</p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">8. Barns integritet</h2>
-              <p>Calibre är inte avsett för barn under 13 år. Vi samlar inte medvetet in information från barn under 13 år.</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">8. Children's Privacy</h2>
+              <p>Calibre is not intended for children under 13 years old. We do not knowingly collect information from children under 13.</p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">9. Ändringar av integritetspolicyn</h2>
-              <p>Vi kan uppdatera denna policy. Användare kommer att meddelas via appnotifiering och e-post.</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">9. Privacy Policy Changes</h2>
+              <p>We may update this policy. Users will be notified via app notification and email.</p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gold mb-3">10. Kontaktinformation</h2>
-              <p className="mb-3">För integritetsfrågor, kontakta oss på:</p>
+              <h2 className="text-2xl font-semibold text-gold mb-3">10. Contact Information</h2>
+              <p className="mb-3">For privacy questions, contact us at:</p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>E-post: privacy@calibre-app.com</li>
-                <li>Adress: [Din företagsadress]</li>
+                <li>Email: privacy@calibre-app.com</li>
+                <li>Address: [Your company address]</li>
               </ul>
             </section>
           </CardContent>

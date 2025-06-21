@@ -37,12 +37,12 @@ const config: CapacitorConfig = {
     },
     Camera: {
       permissions: {
-        camera: "För att ta framstegsfoton och analysera form"
+        camera: "To take progress photos and analyze form"
       }
     },
     Geolocation: {
       permissions: {
-        location: "För att hitta närliggande gym och utomhusträning"
+        location: "To find nearby gyms and outdoor training locations"
       }
     }
   },
