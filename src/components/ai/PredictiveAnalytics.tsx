@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Crystal, TrendingUp, Target, Calendar, Award } from 'lucide-react';
+import { Sparkles, TrendingUp, Target, Calendar, Award } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
@@ -114,10 +113,10 @@ const PredictiveAnalytics = () => {
     // Workout consistency predictions
     if (workouts.length >= 12) {
       const weeklyWorkouts = groupWorkoutsByWeek(workouts);
-      const avgWeeklyWorkouts = Object.values(weeklyWorkouts).reduce((a: number, b: number) => a + b, 0) / Object.keys(weeklyWorkouts).length;
+      const weeklyValues = Object.values(weeklyWorkouts) as number[];
+      const avgWeeklyWorkouts = weeklyValues.reduce((a, b) => a + b, 0) / weeklyValues.length;
       
       const predictedYearlyWorkouts = avgWeeklyWorkouts * 52;
-      const currentYearlyPace = (workouts.length / (workouts.length / avgWeeklyWorkouts)) * 52;
 
       predictions.push({
         id: 'workout-consistency',
@@ -221,7 +220,7 @@ const PredictiveAnalytics = () => {
       case 'strength': return TrendingUp;
       case 'endurance': return Target;
       case 'skill': return Award;
-      default: return Crystal;
+      default: return Sparkles;
     }
   };
 
@@ -240,7 +239,7 @@ const PredictiveAnalytics = () => {
       {/* Header */}
       <div className="text-center">
         <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-4 py-2 mb-6">
-          <Crystal className="h-4 w-4 text-cyan-400" />
+          <Sparkles className="h-4 w-4 text-cyan-400" />
           <span className="text-cyan-400 text-sm font-medium">Predictive Analytics</span>
         </div>
         
@@ -259,7 +258,7 @@ const PredictiveAnalytics = () => {
       {predictions.length === 0 ? (
         <Card className="bg-slate-800/50 border-slate-700">
           <CardContent className="text-center py-12">
-            <Crystal className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-white mb-2">No Predictions Available</h3>
             <p className="text-gray-400">
               Keep tracking your workouts to get personalized performance predictions.

@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, BarChart3, Crystal, TrendingUp } from 'lucide-react';
-import AdvancedAnalytics from './AdvancedAnalytics';
+import { Brain, BarChart3, Sparkles, TrendingUp } from 'lucide-react';
+import AdvancedAnalytics from '../analytics/AdvancedAnalytics';
 import AIInsights from './AIInsights';
 import PredictiveAnalytics from './PredictiveAnalytics';
 
@@ -41,7 +41,7 @@ const AIDashboard = () => {
             AI Insights
           </TabsTrigger>
           <TabsTrigger value="predictions" className="text-white flex items-center gap-2">
-            <Crystal className="h-4 w-4" />
+            <Sparkles className="h-4 w-4" />
             Predictions
           </TabsTrigger>
         </TabsList>

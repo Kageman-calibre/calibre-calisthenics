@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -5,7 +6,7 @@ import { useAuth } from "./auth/AuthProvider";
 
 const Navigation = ({ activeSection, setActiveSection }: { activeSection: string; setActiveSection: (section: string) => void }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -67,7 +68,7 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
               {user?.email ? user.email : "Guest"}
             </span>
             <button
-              onClick={logout}
+              onClick={signOut}
               className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors"
             >
               Logout
@@ -95,7 +96,7 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
             ))}
             <button
               onClick={() => {
-                logout();
+                signOut();
                 closeMenu();
               }}
               className="block bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors mt-3 w-full text-center"
