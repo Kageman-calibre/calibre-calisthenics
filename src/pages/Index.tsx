@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Hero from "../components/Hero";
 import WorkoutCategories from "../components/WorkoutCategories";
@@ -20,6 +19,7 @@ import TrainerConnection from "../components/social/TrainerConnection";
 import WorkoutTemplates from "../components/templates/WorkoutTemplates";
 import ExerciseLibrary from "../components/exercise/ExerciseLibrary";
 import SmartProgramming from "../components/programming/SmartProgramming";
+import AIDashboard from "../components/ai/AIDashboard";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
@@ -122,7 +122,7 @@ const Index = () => {
         return (
           <section className="py-20 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-              <AIPersonalization />
+              <AIDashboard />
             </div>
           </section>
         );

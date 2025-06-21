@@ -1,4 +1,3 @@
-
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getExerciseById } from "../data/exerciseDatabase";
@@ -59,6 +58,9 @@ const WorkoutDetail = () => {
         difficulty: 'intermediate',
         programName: 'Default Workout'
       });
+
+      // Show completion message with AI insights hint
+      console.log('Workout completed! Check AI Insights for personalized recommendations.');
     }
   };
 

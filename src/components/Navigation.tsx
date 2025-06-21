@@ -1,120 +1,111 @@
-
 import { useState } from "react";
-import { Menu, X, Dumbbell, User, BarChart3, Users, Apple, Zap, BookOpen, Smartphone, Settings, Crown, Target, Brain } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import { useAuth } from "./auth/AuthProvider";
 
-interface NavigationProps {
-  activeSection: string;
-  setActiveSection: (section: string) => void;
-}
+const Navigation = ({ activeSection, setActiveSection }: { activeSection: string; setActiveSection: (section: string) => void }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
-const Navigation = ({ activeSection, setActiveSection }: NavigationProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { signOut } = useAuth();
-
-  const navigationItems = [
-    { id: "home", label: "Home", icon: Dumbbell },
-    { id: "exercises", label: "Exercises", icon: Target },
-    { id: "templates", label: "Templates", icon: BookOpen },
-    { id: "programming", label: "Programming", icon: Brain },
-    { id: "workouts", label: "Workouts", icon: Zap },
-    { id: "progress", label: "Progress", icon: BarChart3 },
-    { id: "profile", label: "Profile", icon: User },
-    { id: "nutrition", label: "Nutrition", icon: Apple },
-    { id: "social", label: "Social", icon: Users },
-    { id: "analytics", label: "Analytics", icon: BarChart3 },
-    { id: "mobile", label: "Mobile", icon: Smartphone },
-    { id: "premium", label: "Premium", icon: Crown },
-  ];
-
-  const handleNavClick = (sectionId: string) => {
-    setActiveSection(sectionId);
-    setIsOpen(false);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  const navItems = [
+    { id: "home", label: "Home" },
+    { id: "workouts", label: "Workouts" },
+    { id: "exercises", label: "Exercises" },
+    { id: "templates", label: "Templates" },
+    { id: "programming", label: "Programming" },
+    { id: "progress", label: "Progress" },
+    { id: "analytics", label: "Analytics" },
+    { id: "ai", label: "AI Insights" },
+    { id: "nutrition", label: "Nutrition" },
+    { id: "social", label: "Community" },
+    { id: "profile", label: "Profile" },
+  ];
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="bg-slate-900/80 backdrop-blur-md fixed top-0 left-0 w-full z-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
-            <Dumbbell className="h-8 w-8 text-orange-500" />
-            <span className="ml-2 text-xl font-bold text-white">FitnessPro</span>
-          </div>
+          <Link to="/" className="text-white font-bold text-xl">
+            FitnessAI
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              {navigationItems.slice(0, 6).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center space-x-1 ${
-                      activeSection === item.id
-                        ? "bg-orange-500 text-white"
-                        : "text-gray-300 hover:text-white hover:bg-slate-700"
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <nav className="hidden md:flex space-x-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.id}
+                to="/"
+                className={`text-gray-300 hover:text-white transition-colors ${activeSection === item.id ? "text-white" : ""}`}
+                onClick={() => {
+                  setActiveSection(item.id);
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-          {/* User Menu */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm" onClick={signOut}>
-              Sign Out
-            </Button>
-          </div>
-
-          {/* Mobile menu button */}
+          {/* Mobile Button */}
           <div className="md:hidden">
+            <button onClick={toggleMenu} className="text-gray-300 hover:text-white focus:outline-none focus:text-white">
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+
+          {/* Profile Section */}
+          <div className="hidden md:flex items-center space-x-4">
+            <span className="text-gray-300">
+              {user?.email ? user.email : "Guest"}
+            </span>
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-400 hover:text-white hover:bg-slate-700 px-3 py-2 rounded-md"
+              onClick={logout}
+              className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors"
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              Logout
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {isOpen && (
+      {/* Mobile Menu */}
+      {isMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-slate-900/98 backdrop-blur-sm border-t border-slate-700">
-            {navigationItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 flex items-center space-x-2 ${
-                    activeSection === item.id
-                      ? "bg-orange-500 text-white"
-                      : "text-gray-300 hover:text-white hover:bg-slate-700"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-            <div className="pt-4 border-t border-slate-700">
-              <Button variant="outline" size="sm" onClick={signOut} className="w-full">
-                Sign Out
-              </Button>
-            </div>
-          </div>
+          <nav className="px-4 py-3">
+            {navItems.map((item) => (
+              <Link
+                key={item.id}
+                to="/"
+                className={`block text-gray-300 hover:text-white py-2 transition-colors ${activeSection === item.id ? "text-white" : ""}`}
+                onClick={() => {
+                  setActiveSection(item.id);
+                  closeMenu();
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <button
+              onClick={() => {
+                logout();
+                closeMenu();
+              }}
+              className="block bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors mt-3 w-full text-center"
+            >
+              Logout
+            </button>
+          </nav>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
 
