@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Hero from "../components/Hero";
 import WorkoutCategories from "../components/WorkoutCategories";
@@ -26,9 +25,21 @@ import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import SmartWorkoutIntelligence from "../components/intelligence/SmartWorkoutIntelligence";
 import SkillMastery from "../components/skills/SkillMastery";
+import AdBanner from "../components/ads/AdBanner";
+import InterstitialAd from "../components/ads/InterstitialAd";
+import AppPermissions from "../components/mobile/AppPermissions";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
+  const [showInterstitialAd, setShowInterstitialAd] = useState(false);
+
+  // Visa interstitiell annons vid vissa navigeringar
+  const handleSectionChange = (section: string) => {
+    if (Math.random() > 0.7) { // 30% chans för interstitiell annons
+      setShowInterstitialAd(true);
+    }
+    setActiveSection(section);
+  };
 
   const renderSection = () => {
     switch (activeSection) {
@@ -178,6 +189,14 @@ const Index = () => {
             </div>
           </section>
         );
+      case "permissions":
+        return (
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <AppPermissions />
+            </div>
+          </section>
+        );
       default:
         return (
           <>
@@ -197,13 +216,20 @@ const Index = () => {
 
   return (
     <div className="min-h-screen gradient-black-burgundy">
-      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
+      <Navigation activeSection={activeSection} setActiveSection={handleSectionChange} />
       
       <main>
+        <AdBanner position="top" size="banner" />
         {renderSection()}
+        <AdBanner position="bottom" size="banner" />
       </main>
       
       <Footer />
+      
+      <InterstitialAd
+        isOpen={showInterstitialAd}
+        onClose={() => setShowInterstitialAd(false)}
+      />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -11,6 +10,7 @@ import ProgramDetailPage from "./pages/ProgramDetailPage";
 import WorkoutDetailPage from "./pages/WorkoutDetailPage";
 import WorkoutBuilderPage from "./pages/WorkoutBuilderPage";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +36,7 @@ const AppRoutes = () => {
       <Route path="/program/:id" element={<ProgramDetailPage />} />
       <Route path="/workout/:id" element={<WorkoutDetailPage />} />
       <Route path="/studio" element={<WorkoutBuilderPage />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
