@@ -1,12 +1,13 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, LogIn } from "lucide-react";
 import { useAuth } from "./auth/AuthProvider";
 
 const Navigation = ({ activeSection, setActiveSection }: { activeSection: string; setActiveSection: (section: string) => void }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -16,8 +17,20 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
     setIsMenuOpen(false);
   };
 
+  // Handle navigation with proper base path
+  const handleNavigation = (section: string, path?: string) => {
+    setActiveSection(section);
+    if (path && path !== "/") {
+      navigate(path);
+    } else {
+      // For home navigation, scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    closeMenu();
+  };
+
   const navItems = [
-    { id: "home", label: "Home" },
+    { id: "home", label: "Home", path: "/" },
     { id: "workouts", label: "Workouts" },
     { id: "exercises", label: "Exercises" },
     { id: "skills", label: "Skills" },
@@ -45,16 +58,13 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-6">
             {navItems.map((item) => (
-              <Link
+              <button
                 key={item.id}
-                to="/"
                 className={`text-white hover:text-gold transition-colors font-medium ${activeSection === item.id ? "text-gold" : ""}`}
-                onClick={() => {
-                  setActiveSection(item.id);
-                }}
+                onClick={() => handleNavigation(item.id, item.path)}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
 
@@ -97,17 +107,13 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
         <div className="md:hidden bg-black/95 backdrop-blur-md border-t border-gold/20">
           <nav className="px-4 py-3">
             {navItems.map((item) => (
-              <Link
+              <button
                 key={item.id}
-                to="/"
-                className={`block text-white hover:text-gold py-3 transition-colors font-medium ${activeSection === item.id ? "text-gold" : ""}`}
-                onClick={() => {
-                  setActiveSection(item.id);
-                  closeMenu();
-                }}
+                className={`block text-white hover:text-gold py-3 transition-colors font-medium w-full text-left ${activeSection === item.id ? "text-gold" : ""}`}
+                onClick={() => handleNavigation(item.id, item.path)}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
             {user ? (
               <button

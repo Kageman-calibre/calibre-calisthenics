@@ -44,11 +44,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => subscription.unsubscribeÂ();
   }, []);
 
   const signUp = async (email: string, password: string, userData?: any) => {
-    const redirectUrl = `${window.location.origin}/`;
+    // Use the correct redirect URL based on environment
+    const isProduction = import.meta.env.PROD;
+    const baseUrl = isProduction 
+      ? 'https://yourusername.github.io/calibre-fitness' 
+      : window.location.origin;
+    const redirectUrl = `${baseUrl}/`;
     
     const { error } = await supabase.auth.signUp({
       email,
