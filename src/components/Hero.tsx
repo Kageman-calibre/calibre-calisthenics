@@ -1,7 +1,11 @@
 
 import { Play, ArrowRight, Star, Users, Award } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "./auth/AuthProvider";
 
 const Hero = () => {
+  const { user } = useAuth();
+
   return (
     <section className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background gradient with subtle pattern */}
@@ -29,15 +33,37 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in">
-            <button className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3">
-              <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
-              <span className="text-lg">Start Your Journey</span>
-            </button>
-            
-            <button className="group border-2 border-gold hover:border-white text-gold hover:text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3">
-              <span className="text-lg">Explore Programs</span>
-              <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
-            </button>
+            {user ? (
+              <>
+                <button className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3">
+                  <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
+                  <span className="text-lg">Start Your Journey</span>
+                </button>
+                
+                <Link
+                  to="/programs"
+                  className="group border-2 border-gold hover:border-white text-gold hover:text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3"
+                >
+                  <span className="text-lg">Explore Programs</span>
+                  <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/auth"
+                  className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3"
+                >
+                  <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
+                  <span className="text-lg">Start Your Journey</span>
+                </Link>
+                
+                <button className="group border-2 border-gold hover:border-white text-gold hover:text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3">
+                  <span className="text-lg">Explore Programs</span>
+                  <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </>
+            )}
           </div>
         </div>
         

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn } from "lucide-react";
 import { useAuth } from "./auth/AuthProvider";
 
 const Navigation = ({ activeSection, setActiveSection }: { activeSection: string; setActiveSection: (section: string) => void }) => {
@@ -67,15 +67,27 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
 
           {/* Profile Section */}
           <div className="hidden md:flex items-center space-x-4">
-            <span className="text-white font-medium">
-              {user?.email ? user.email : "Guest"}
-            </span>
-            <button
-              onClick={signOut}
-              className="bg-burgundy hover:bg-burgundy/80 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
-              Logout
-            </button>
+            {user ? (
+              <>
+                <span className="text-white font-medium">
+                  {user.email}
+                </span>
+                <button
+                  onClick={signOut}
+                  className="bg-burgundy hover:bg-burgundy/80 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/auth"
+                className="bg-gold hover:bg-gold/80 text-black font-medium py-2 px-4 rounded-lg transition-colors flex items-center space-x-2"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Sign In</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -97,15 +109,26 @@ const Navigation = ({ activeSection, setActiveSection }: { activeSection: string
                 {item.label}
               </Link>
             ))}
-            <button
-              onClick={() => {
-                signOut();
-                closeMenu();
-              }}
-              className="block bg-burgundy hover:bg-burgundy/80 text-white font-medium py-2 px-4 rounded-lg transition-colors mt-3 w-full text-center"
-            >
-              Logout
-            </button>
+            {user ? (
+              <button
+                onClick={() => {
+                  signOut();
+                  closeMenu();
+                }}
+                className="block bg-burgundy hover:bg-burgundy/80 text-white font-medium py-2 px-4 rounded-lg transition-colors mt-3 w-full text-center"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                onClick={closeMenu}
+                className="block bg-gold hover:bg-gold/80 text-black font-medium py-2 px-4 rounded-lg transition-colors mt-3 w-full text-center flex items-center justify-center space-x-2"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Sign In</span>
+              </Link>
+            )}
           </nav>
         </div>
       )}
