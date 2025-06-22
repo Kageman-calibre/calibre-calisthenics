@@ -15,6 +15,12 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
+// Get the base path for GitHub Pages deployment
+const getBasename = () => {
+  const isProduction = import.meta.env.PROD;
+  return isProduction ? '/calibre-fitness' : '';
+};
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
 
@@ -89,7 +95,7 @@ const AppRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={getBasename()}>
         <TooltipProvider>
           <Toaster />
           <AppRoutes />
