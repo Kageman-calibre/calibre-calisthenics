@@ -48,12 +48,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signUp = async (email: string, password: string, userData?: any) => {
-    // Use the correct redirect URL based on environment
-    const isProduction = import.meta.env.PROD;
-    const baseUrl = isProduction 
-      ? 'https://yourusername.github.io/calibre-fitness' 
-      : window.location.origin;
-    const redirectUrl = `${baseUrl}/`;
+    // Use dynamic redirect URL that works for any deployment
+    const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
       email,
