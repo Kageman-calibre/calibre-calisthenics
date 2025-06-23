@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,7 +17,7 @@ const queryClient = new QueryClient();
 // Get the base path for GitHub Pages deployment
 const getBasename = () => {
   const isProduction = import.meta.env.PROD;
-  return isProduction ? '/calibre-fitness' : '';
+  return isProduction ? '/calibre-calisthenics' : '';
 };
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
