@@ -35,7 +35,7 @@ if [ $? -eq 0 ]; then
     echo "   - The workflow will automatically deploy your site"
     echo ""
     echo "4. Your site will be available at:"
-    echo "   https://[your-username].github.io/calibre-fitness/"
+    echo "   https://Kageman-calibre.github.io/calibre-calisthenics/"
     echo ""
     echo "✨ The GitHub Actions workflow is already configured!"
 else
