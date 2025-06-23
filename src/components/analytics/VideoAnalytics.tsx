@@ -1,10 +1,10 @@
-
 import { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Upload, Play, Pause, RotateCcw, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import VideoAnnotator from './VideoAnnotator';
 
 interface AnalysisResult {
   exercise: string;
@@ -278,6 +278,22 @@ const VideoAnalytics = () => {
             </CardContent>
           </Card>
         </div>
+      )}
+
+      {/* Video Annotation Section */}
+      {analysisResult && uploadedVideo && (
+        <Card className="bg-slate-800/50 border-slate-700">
+          <CardHeader>
+            <CardTitle className="text-white">Video Annotation & Download</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-300 mb-4">
+              Create an annotated version of your video with analysis overlays including form scores, 
+              rep counts, feedback, and visual indicators.
+            </p>
+            <VideoAnnotator videoUrl={uploadedVideo} analysisResult={analysisResult} />
+          </CardContent>
+        </Card>
       )}
 
       {/* Upload New Video */}
