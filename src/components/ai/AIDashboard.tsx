@@ -1,10 +1,11 @@
 
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, BarChart3, Sparkles, TrendingUp } from 'lucide-react';
+import { Brain, BarChart3, Sparkles, Video } from 'lucide-react';
 import AdvancedAnalytics from '../analytics/AdvancedAnalytics';
 import AIInsights from './AIInsights';
 import PredictiveAnalytics from './PredictiveAnalytics';
+import VideoAnalytics from '../analytics/VideoAnalytics';
 
 const AIDashboard = () => {
   const [activeTab, setActiveTab] = useState('analytics');
@@ -25,20 +26,24 @@ const AIDashboard = () => {
           </span>
         </h1>
         <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-          Advanced AI analytics, personalized insights, and predictive modeling for optimal training results
+          Advanced AI analytics, personalized insights, video analysis, and predictive modeling for optimal training results
         </p>
       </div>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+        <TabsList className="grid w-full grid-cols-4 bg-slate-800/50">
           <TabsTrigger value="analytics" className="text-white flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
-            Advanced Analytics
+            Analytics
           </TabsTrigger>
           <TabsTrigger value="insights" className="text-white flex items-center gap-2">
             <Brain className="h-4 w-4" />
             AI Insights
+          </TabsTrigger>
+          <TabsTrigger value="video" className="text-white flex items-center gap-2">
+            <Video className="h-4 w-4" />
+            Video Analysis
           </TabsTrigger>
           <TabsTrigger value="predictions" className="text-white flex items-center gap-2">
             <Sparkles className="h-4 w-4" />
@@ -52,6 +57,10 @@ const AIDashboard = () => {
         
         <TabsContent value="insights" className="mt-8">
           <AIInsights />
+        </TabsContent>
+        
+        <TabsContent value="video" className="mt-8">
+          <VideoAnalytics />
         </TabsContent>
         
         <TabsContent value="predictions" className="mt-8">

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import Programs from "./pages/Programs";
 import ProgramDetailPage from "./pages/ProgramDetailPage";
 import WorkoutDetailPage from "./pages/WorkoutDetailPage";
 import WorkoutBuilderPage from "./pages/WorkoutBuilderPage";
+import VideoAnalyticsPage from "./pages/VideoAnalyticsPage";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
