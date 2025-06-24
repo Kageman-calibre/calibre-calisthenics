@@ -35,10 +35,10 @@ const MobileFeatures = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 px-3 sm:px-0">
       <div className="text-center">
-        <h2 className="text-4xl font-bold text-white mb-4">Mobile Features</h2>
-        <p className="text-xl text-gray-300">Enhanced mobile experience with native capabilities</p>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-4">Mobile Features</h2>
+        <p className="text-lg sm:text-xl text-gray-300">Enhanced mobile experience with native capabilities</p>
       </div>
 
       <CameraInterface
@@ -53,7 +53,7 @@ const MobileFeatures = () => {
         onTakeAnother={() => setPhotoTaken(null)}
       />
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2">
         {capabilities.map(capability => (
           <MobileCapabilityCard
             key={capability.id}

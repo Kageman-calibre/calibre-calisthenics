@@ -49,7 +49,7 @@ const Index = () => {
                   <Hero />
                 </Suspense>
               </ErrorBoundary>
-              <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <section className="py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                   <LazySection componentName="WorkoutTemplates" />
                 </div>
@@ -61,15 +61,15 @@ const Index = () => {
           );
         case "workouts":
           return (
-            <>
+            <div className="pt-14 sm:pt-16">
               <LazySection componentName="WorkoutCategories" />
               <LazySection componentName="FeaturedExercises" />
               <LazySection componentName="TrainingSchedules" />
-            </>
+            </div>
           );
         case "exercises":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="ExerciseLibrary" />
               </div>
@@ -77,7 +77,7 @@ const Index = () => {
           );
         case "templates":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="WorkoutTemplates" />
               </div>
@@ -85,19 +85,27 @@ const Index = () => {
           );
         case "programming":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="SmartProgramming" />
               </div>
             </section>
           );
         case "progress":
-          return <LazySection componentName="ProgressDashboard" />;
+          return (
+            <div className="pt-14 sm:pt-16">
+              <LazySection componentName="ProgressDashboard" />
+            </div>
+          );
         case "profile":
-          return <LazySection componentName="UserProfile" />;
+          return (
+            <div className="pt-14 sm:pt-16">
+              <LazySection componentName="UserProfile" />
+            </div>
+          );
         case "nutrition":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="EnhancedNutritionTracker" />
               </div>
@@ -106,7 +114,7 @@ const Index = () => {
         case "community":
         case "social":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="SocialHub" />
               </div>
@@ -114,7 +122,7 @@ const Index = () => {
           );
         case "gamification":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="GameDashboard" />
               </div>
@@ -122,7 +130,7 @@ const Index = () => {
           );
         case "mobile":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="MobileFeatures" />
               </div>
@@ -130,7 +138,7 @@ const Index = () => {
           );
         case "analytics":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="DetailedAnalytics" />
               </div>
@@ -138,7 +146,7 @@ const Index = () => {
           );
         case "ai":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="AIDashboard" />
               </div>
@@ -146,7 +154,7 @@ const Index = () => {
           );
         case "integrations":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="IntegrationHub" />
               </div>
@@ -154,7 +162,7 @@ const Index = () => {
           );
         case "premium":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="PremiumFeatures" />
               </div>
@@ -162,7 +170,7 @@ const Index = () => {
           );
         case "trainers":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="TrainerConnection" />
               </div>
@@ -170,7 +178,7 @@ const Index = () => {
           );
         case "skills":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="SkillMastery" />
               </div>
@@ -178,7 +186,7 @@ const Index = () => {
           );
         case "intelligence":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="SmartWorkoutIntelligence" />
               </div>
@@ -186,7 +194,7 @@ const Index = () => {
           );
         case "permissions":
           return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <section className="pt-14 sm:pt-16 py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <LazySection componentName="AppPermissions" />
               </div>
@@ -200,7 +208,7 @@ const Index = () => {
                   <Hero />
                 </Suspense>
               </ErrorBoundary>
-              <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <section className="py-8 sm:py-12 lg:py-20 px-3 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                   <LazySection componentName="WorkoutTemplates" />
                 </div>
@@ -215,8 +223,8 @@ const Index = () => {
       console.error("Error rendering section:", error);
       return (
         <ErrorBoundary>
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="text-white text-xl">Loading error. Please refresh the page.</div>
+          <div className="min-h-screen flex items-center justify-center px-4">
+            <div className="text-white text-lg sm:text-xl text-center">Loading error. Please refresh the page.</div>
           </div>
         </ErrorBoundary>
       );
@@ -235,7 +243,7 @@ const Index = () => {
     <div className="min-h-screen gradient-black-burgundy">
       <Navigation activeSection={activeSection} setActiveSection={handleSectionChange} />
       
-      <main>
+      <main className="relative">
         <AdBanner position="top" size="banner" />
         <MemoizedSectionRenderer />
         <AdBanner position="bottom" size="banner" />
