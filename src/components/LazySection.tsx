@@ -1,13 +1,14 @@
 
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import { Loading } from '@/components/ui/loading';
+import ErrorBoundary from '@/components/ui/error-boundary';
 
 interface LazySectionProps {
   componentName: string;
   fallback?: React.ReactNode;
 }
 
-const LazySection = ({ componentName, fallback }: LazySectionProps) => {
+const LazySection = memo(({ componentName, fallback }: LazySectionProps) => {
   const Component = lazy(() => {
     switch (componentName) {
       case 'WorkoutCategories':
@@ -56,10 +57,14 @@ const LazySection = ({ componentName, fallback }: LazySectionProps) => {
   });
 
   return (
-    <Suspense fallback={fallback || <Loading variant="section" />}>
-      <Component />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={fallback || <Loading variant="section" />}>
+        <Component />
+      </Suspense>
+    </ErrorBoundary>
   );
-};
+});
+
+LazySection.displayName = 'LazySection';
 
 export default LazySection;

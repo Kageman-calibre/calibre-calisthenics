@@ -1,11 +1,12 @@
 
-import { useState, useEffect, Suspense, lazy } from "react";
+import { useState, useEffect, Suspense, lazy, useCallback, memo } from "react";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import AdBanner from "../components/ads/AdBanner";
 import InterstitialAd from "../components/ads/InterstitialAd";
 import { Loading } from "../components/ui/loading";
 import LazySection from "../components/LazySection";
+import ErrorBoundary from "../components/ui/error-boundary";
 
 // Only import components that are immediately needed
 const Hero = lazy(() => import("../components/Hero"));
@@ -20,16 +21,22 @@ const Index = () => {
     setIsLoading(false);
   }, []);
 
-  // Show interstitial ad on certain navigations
-  const handleSectionChange = (section: string) => {
+  // Memoize the section change handler to prevent unnecessary re-renders
+  const handleSectionChange = useCallback((section: string) => {
     console.log("Section changing to:", section);
     if (Math.random() > 0.7) { // 30% chance for interstitial ad
       setShowInterstitialAd(true);
     }
     setActiveSection(section);
-  };
+  }, []);
 
-  const renderSection = () => {
+  // Memoize the interstitial ad close handler
+  const handleInterstitialClose = useCallback(() => {
+    setShowInterstitialAd(false);
+  }, []);
+
+  // Memoized section renderer to prevent unnecessary re-renders
+  const MemoizedSectionRenderer = memo(() => {
     console.log("Rendering section:", activeSection);
     
     try {
@@ -37,9 +44,11 @@ const Index = () => {
         case "home":
           return (
             <>
-              <Suspense fallback={<Loading variant="section" />}>
-                <Hero />
-              </Suspense>
+              <ErrorBoundary>
+                <Suspense fallback={<Loading variant="section" />}>
+                  <Hero />
+                </Suspense>
+              </ErrorBoundary>
               <section className="py-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                   <LazySection componentName="WorkoutTemplates" />
@@ -186,9 +195,11 @@ const Index = () => {
         default:
           return (
             <>
-              <Suspense fallback={<Loading variant="section" />}>
-                <Hero />
-              </Suspense>
+              <ErrorBoundary>
+                <Suspense fallback={<Loading variant="section" />}>
+                  <Hero />
+                </Suspense>
+              </ErrorBoundary>
               <section className="py-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                   <LazySection componentName="WorkoutTemplates" />
@@ -203,12 +214,16 @@ const Index = () => {
     } catch (error) {
       console.error("Error rendering section:", error);
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">Loading error. Please refresh the page.</div>
-        </div>
+        <ErrorBoundary>
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="text-white text-xl">Loading error. Please refresh the page.</div>
+          </div>
+        </ErrorBoundary>
       );
     }
-  };
+  });
+
+  MemoizedSectionRenderer.displayName = 'MemoizedSectionRenderer';
 
   if (isLoading) {
     return <Loading />;
@@ -222,7 +237,7 @@ const Index = () => {
       
       <main>
         <AdBanner position="top" size="banner" />
-        {renderSection()}
+        <MemoizedSectionRenderer />
         <AdBanner position="bottom" size="banner" />
       </main>
       
@@ -230,7 +245,7 @@ const Index = () => {
       
       <InterstitialAd
         isOpen={showInterstitialAd}
-        onClose={() => setShowInterstitialAd(false)}
+        onClose={handleInterstitialClose}
       />
     </div>
   );
