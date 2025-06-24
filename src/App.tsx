@@ -11,6 +11,7 @@ import ProgramDetailPage from "./pages/ProgramDetailPage";
 import WorkoutDetailPage from "./pages/WorkoutDetailPage";
 import WorkoutBuilderPage from "./pages/WorkoutBuilderPage";
 import VideoAnalyticsPage from "./pages/VideoAnalyticsPage";
+import SkillGuides from "./pages/SkillGuides";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
@@ -56,6 +57,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Index />} />
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/skill-guides" element={<SkillGuides />} />
       <Route 
         path="/programs" 
         element={
