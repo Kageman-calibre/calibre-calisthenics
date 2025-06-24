@@ -37,24 +37,24 @@ const MobileCapabilityCard = ({ capability, isActive, onTriggerHaptic }: MobileC
 
   return (
     <div
-      className={`bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 border transition-all duration-300 ${
+      className={`bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 sm:p-8 border transition-all duration-300 ${
         capability.available 
-          ? 'border-slate-700/50 hover:border-blue-500/50' 
+          ? 'border-slate-700/50 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10' 
           : 'border-red-500/30 opacity-60'
       }`}
     >
-      <div className="flex items-start justify-between mb-3 sm:mb-4">
-        <div className="flex items-center">
-          <Icon className={`h-6 w-6 sm:h-8 sm:w-8 mr-2 sm:mr-3 ${
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex items-center flex-1">
+          <Icon className={`h-8 w-8 sm:h-10 sm:w-10 mr-4 flex-shrink-0 ${
             capability.available ? 'text-blue-400' : 'text-gray-500'
           }`} />
-          <div>
-            <h3 className="text-base sm:text-lg font-semibold text-white">{capability.name}</h3>
-            <p className="text-gray-400 text-xs sm:text-sm">{capability.description}</p>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">{capability.name}</h3>
+            <p className="text-gray-400 text-sm sm:text-base leading-relaxed">{capability.description}</p>
           </div>
         </div>
         {!capability.available && (
-          <span className="text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded whitespace-nowrap">
+          <span className="text-xs sm:text-sm text-red-400 bg-red-500/20 px-3 py-1 rounded-full whitespace-nowrap ml-3 flex-shrink-0">
             Not Available
           </span>
         )}
@@ -63,10 +63,10 @@ const MobileCapabilityCard = ({ capability, isActive, onTriggerHaptic }: MobileC
       {capability.available && (
         <button
           onClick={capability.action}
-          className={`w-full py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base ${
+          className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-medium transition-all duration-200 text-base sm:text-lg ${
             isActive
-              ? 'bg-green-500 hover:bg-green-600 text-white'
-              : 'bg-blue-500 hover:bg-blue-600 text-white'
+              ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg hover:shadow-green-500/25'
+              : 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-blue-500/25'
           }`}
         >
           {getButtonText()}
