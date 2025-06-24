@@ -12,6 +12,7 @@ import WorkoutDetailPage from "./pages/WorkoutDetailPage";
 import WorkoutBuilderPage from "./pages/WorkoutBuilderPage";
 import VideoAnalyticsPage from "./pages/VideoAnalyticsPage";
 import SkillGuides from "./pages/SkillGuides";
+import RPGPage from "./pages/RPGPage";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
@@ -87,6 +88,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <WorkoutBuilderPage />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/rpg" 
+        element={
+          <ProtectedRoute>
+            <RPGPage />
           </ProtectedRoute>
         } 
       />

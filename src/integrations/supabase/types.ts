@@ -237,6 +237,69 @@ export type Database = {
           },
         ]
       }
+      user_badges: {
+        Row: {
+          badge_description: string | null
+          badge_id: string
+          badge_name: string
+          earned_at: string | null
+          id: string
+          rarity: string | null
+          user_id: string
+        }
+        Insert: {
+          badge_description?: string | null
+          badge_id: string
+          badge_name: string
+          earned_at?: string | null
+          id?: string
+          rarity?: string | null
+          user_id: string
+        }
+        Update: {
+          badge_description?: string | null
+          badge_id?: string
+          badge_name?: string
+          earned_at?: string | null
+          id?: string
+          rarity?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_progression: {
+        Row: {
+          created_at: string | null
+          current_xp: number | null
+          id: string
+          level: number | null
+          title: string | null
+          total_xp: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_xp?: number | null
+          id?: string
+          level?: number | null
+          title?: string | null
+          total_xp?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_xp?: number | null
+          id?: string
+          level?: number | null
+          title?: string | null
+          total_xp?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_stats: {
         Row: {
           created_at: string
@@ -371,13 +434,57 @@ export type Database = {
           },
         ]
       }
+      xp_rewards: {
+        Row: {
+          action_type: string
+          base_xp: number
+          created_at: string | null
+          description: string | null
+          id: string
+        }
+        Insert: {
+          action_type: string
+          base_xp: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+        }
+        Update: {
+          action_type?: string
+          base_xp?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      award_xp: {
+        Args: {
+          p_user_id: string
+          p_action_type: string
+          p_multiplier?: number
+        }
+        Returns: {
+          xp_gained: number
+          leveled_up: boolean
+          new_level: number
+        }[]
+      }
+      calculate_level_from_xp: {
+        Args: { xp: number }
+        Returns: number
+      }
       calculate_recovery_score: {
         Args: { p_user_id: string; p_date?: string }
+        Returns: number
+      }
+      get_xp_for_next_level: {
+        Args: { current_level: number }
         Returns: number
       }
       suggest_progressive_overload: {
