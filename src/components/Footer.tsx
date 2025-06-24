@@ -1,5 +1,5 @@
 
-import { Zap, Instagram, Youtube, Twitter } from "lucide-react";
+import { Instagram, Youtube, Twitter } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -9,8 +9,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 sm:col-span-2 lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <Zap className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
-              <span className="text-2xl sm:text-3xl font-bold text-gold tracking-wider">CALIBRE</span>
+              <img 
+                src="/lovable-uploads/b99fef11-6aaf-4783-9d1e-a21e1985649b.png" 
+                alt="Calibre Calisthenics Logo" 
+                className="h-12 w-auto"
+              />
             </div>
             <p className="text-white/80 mb-8 max-w-md text-base sm:text-lg leading-relaxed">
               Master your body with the power of calisthenics. Transform your physique through bodyweight training, no equipment needed.

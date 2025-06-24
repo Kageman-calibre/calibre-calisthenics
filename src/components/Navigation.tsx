@@ -58,8 +58,12 @@ const Navigation = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <a href="/" className="text-2xl font-bold text-white">
-                Calibre
+              <a href="/" className="flex items-center">
+                <img 
+                  src="/lovable-uploads/b99fef11-6aaf-4783-9d1e-a21e1985649b.png" 
+                  alt="Calibre Calisthenics Logo" 
+                  className="h-10 w-auto"
+                />
               </a>
             </div>
 
