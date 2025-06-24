@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Hero from "../components/Hero";
 import WorkoutCategories from "../components/WorkoutCategories";
 import FeaturedExercises from "../components/FeaturedExercises";
@@ -32,9 +32,16 @@ import AppPermissions from "../components/mobile/AppPermissions";
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [showInterstitialAd, setShowInterstitialAd] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("Index component mounted");
+    setIsLoading(false);
+  }, []);
 
   // Visa interstitiell annons vid vissa navigeringar
   const handleSectionChange = (section: string) => {
+    console.log("Section changing to:", section);
     if (Math.random() > 0.7) { // 30% chans för interstitiell annons
       setShowInterstitialAd(true);
     }
@@ -42,177 +49,198 @@ const Index = () => {
   };
 
   const renderSection = () => {
-    switch (activeSection) {
-      case "home":
-        return (
-          <>
-            <Hero />
+    console.log("Rendering section:", activeSection);
+    
+    try {
+      switch (activeSection) {
+        case "home":
+          return (
+            <>
+              <Hero />
+              <section className="py-20 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                  <WorkoutTemplates />
+                </div>
+              </section>
+              <WorkoutCategories />
+              <FeaturedExercises />
+              <TrainingSchedules />
+            </>
+          );
+        case "workouts":
+          return (
+            <>
+              <WorkoutCategories />
+              <FeaturedExercises />
+              <TrainingSchedules />
+            </>
+          );
+        case "exercises":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <ExerciseLibrary />
+              </div>
+            </section>
+          );
+        case "templates":
+          return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <WorkoutTemplates />
               </div>
             </section>
-            <WorkoutCategories />
-            <FeaturedExercises />
-            <TrainingSchedules />
-          </>
-        );
-      case "workouts":
-        return (
-          <>
-            <WorkoutCategories />
-            <FeaturedExercises />
-            <TrainingSchedules />
-          </>
-        );
-      case "exercises":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <ExerciseLibrary />
-            </div>
-          </section>
-        );
-      case "templates":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <WorkoutTemplates />
-            </div>
-          </section>
-        );
-      case "programming":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <SmartProgramming />
-            </div>
-          </section>
-        );
-      case "progress":
-        return <ProgressDashboard />;
-      case "profile":
-        return <UserProfile />;
-      case "nutrition":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <EnhancedNutritionTracker />
-            </div>
-          </section>
-        );
-      case "community":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <SocialHub />
-            </div>
-          </section>
-        );
-      case "social":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <SocialHub />
-            </div>
-          </section>
-        );
-      case "gamification":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <GameDashboard />
-            </div>
-          </section>
-        );
-      case "mobile":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <MobileFeatures />
-            </div>
-          </section>
-        );
-      case "analytics":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <DetailedAnalytics />
-            </div>
-          </section>
-        );
-      case "ai":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <AIDashboard />
-            </div>
-          </section>
-        );
-      case "integrations":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <IntegrationHub />
-            </div>
-          </section>
-        );
-      case "premium":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <PremiumFeatures />
-            </div>
-          </section>
-        );
-      case "trainers":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <TrainerConnection />
-            </div>
-          </section>
-        );
-      case "skills":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <SkillMastery />
-            </div>
-          </section>
-        );
-      case "intelligence":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <SmartWorkoutIntelligence />
-            </div>
-          </section>
-        );
-      case "permissions":
-        return (
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <AppPermissions />
-            </div>
-          </section>
-        );
-      default:
-        return (
-          <>
-            <Hero />
+          );
+        case "programming":
+          return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <WorkoutTemplates />
+                <SmartProgramming />
               </div>
             </section>
-            <WorkoutCategories />
-            <FeaturedExercises />
-            <TrainingSchedules />
-          </>
-        );
+          );
+        case "progress":
+          return <ProgressDashboard />;
+        case "profile":
+          return <UserProfile />;
+        case "nutrition":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <EnhancedNutritionTracker />
+              </div>
+            </section>
+          );
+        case "community":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <SocialHub />
+              </div>
+            </section>
+          );
+        case "social":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <SocialHub />
+              </div>
+            </section>
+          );
+        case "gamification":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <GameDashboard />
+              </div>
+            </section>
+          );
+        case "mobile":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <MobileFeatures />
+              </div>
+            </section>
+          );
+        case "analytics":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <DetailedAnalytics />
+              </div>
+            </section>
+          );
+        case "ai":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <AIDashboard />
+              </div>
+            </section>
+          );
+        case "integrations":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <IntegrationHub />
+              </div>
+            </section>
+          );
+        case "premium":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <PremiumFeatures />
+              </div>
+            </section>
+          );
+        case "trainers":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <TrainerConnection />
+              </div>
+            </section>
+          );
+        case "skills":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <SkillMastery />
+              </div>
+            </section>
+          );
+        case "intelligence":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <SmartWorkoutIntelligence />
+              </div>
+            </section>
+          );
+        case "permissions":
+          return (
+            <section className="py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <AppPermissions />
+              </div>
+            </section>
+          );
+        default:
+          return (
+            <>
+              <Hero />
+              <section className="py-20 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                  <WorkoutTemplates />
+                </div>
+              </section>
+              <WorkoutCategories />
+              <FeaturedExercises />
+              <TrainingSchedules />
+            </>
+          );
+      }
+    } catch (error) {
+      console.error("Error rendering section:", error);
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-white text-xl">Loading error. Please refresh the page.</div>
+        </div>
+      );
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen gradient-black-burgundy flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  console.log("Rendering Index component");
 
   return (
     <div className="min-h-screen gradient-black-burgundy">
