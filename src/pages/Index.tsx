@@ -241,7 +241,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen gradient-black-burgundy">
-      <Navigation activeSection={activeSection} setActiveSection={handleSectionChange} />
+      <Navigation />
       
       <main className="relative">
         <AdBanner position="top" size="banner" />
