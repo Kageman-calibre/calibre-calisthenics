@@ -1,33 +1,14 @@
-import { useState, useEffect } from "react";
-import Hero from "../components/Hero";
-import WorkoutCategories from "../components/WorkoutCategories";
-import FeaturedExercises from "../components/FeaturedExercises";
-import TrainingSchedules from "../components/TrainingSchedules";
-import ProgressDashboard from "../components/ProgressDashboard";
-import UserProfile from "../components/UserProfile";
-import NutritionTracker from "../components/NutritionTracker";
-import EnhancedNutritionTracker from "../components/nutrition/EnhancedNutritionTracker";
-import CommunityHub from "../components/CommunityHub";
-import SocialHub from "../components/social/SocialHub";
-import MobileFeatures from "../components/MobileFeatures";
-import AnalyticsDashboard from "../components/analytics/AnalyticsDashboard";
-import DetailedAnalytics from "../components/analytics/DetailedAnalytics";
-import AIPersonalization from "../components/personalization/AIPersonalization";
-import IntegrationHub from "../components/integrations/IntegrationHub";
-import PremiumFeatures from "../components/premium/PremiumFeatures";
-import TrainerConnection from "../components/social/TrainerConnection";
-import WorkoutTemplates from "../components/templates/WorkoutTemplates";
-import ExerciseLibrary from "../components/exercise/ExerciseLibrary";
-import SmartProgramming from "../components/programming/SmartProgramming";
-import AIDashboard from "../components/ai/AIDashboard";
-import GameDashboard from "../components/gamification/GameDashboard";
+
+import { useState, useEffect, Suspense, lazy } from "react";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
-import SmartWorkoutIntelligence from "../components/intelligence/SmartWorkoutIntelligence";
-import SkillMastery from "../components/skills/SkillMastery";
 import AdBanner from "../components/ads/AdBanner";
 import InterstitialAd from "../components/ads/InterstitialAd";
-import AppPermissions from "../components/mobile/AppPermissions";
+import { Loading } from "../components/ui/loading";
+import LazySection from "../components/LazySection";
+
+// Only import components that are immediately needed
+const Hero = lazy(() => import("../components/Hero"));
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -39,10 +20,10 @@ const Index = () => {
     setIsLoading(false);
   }, []);
 
-  // Visa interstitiell annons vid vissa navigeringar
+  // Show interstitial ad on certain navigations
   const handleSectionChange = (section: string) => {
     console.log("Section changing to:", section);
-    if (Math.random() > 0.7) { // 30% chans för interstitiell annons
+    if (Math.random() > 0.7) { // 30% chance for interstitial ad
       setShowInterstitialAd(true);
     }
     setActiveSection(section);
@@ -56,30 +37,32 @@ const Index = () => {
         case "home":
           return (
             <>
-              <Hero />
+              <Suspense fallback={<Loading variant="section" />}>
+                <Hero />
+              </Suspense>
               <section className="py-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
-                  <WorkoutTemplates />
+                  <LazySection componentName="WorkoutTemplates" />
                 </div>
               </section>
-              <WorkoutCategories />
-              <FeaturedExercises />
-              <TrainingSchedules />
+              <LazySection componentName="WorkoutCategories" />
+              <LazySection componentName="FeaturedExercises" />
+              <LazySection componentName="TrainingSchedules" />
             </>
           );
         case "workouts":
           return (
             <>
-              <WorkoutCategories />
-              <FeaturedExercises />
-              <TrainingSchedules />
+              <LazySection componentName="WorkoutCategories" />
+              <LazySection componentName="FeaturedExercises" />
+              <LazySection componentName="TrainingSchedules" />
             </>
           );
         case "exercises":
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <ExerciseLibrary />
+                <LazySection componentName="ExerciseLibrary" />
               </div>
             </section>
           );
@@ -87,7 +70,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <WorkoutTemplates />
+                <LazySection componentName="WorkoutTemplates" />
               </div>
             </section>
           );
@@ -95,35 +78,28 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <SmartProgramming />
+                <LazySection componentName="SmartProgramming" />
               </div>
             </section>
           );
         case "progress":
-          return <ProgressDashboard />;
+          return <LazySection componentName="ProgressDashboard" />;
         case "profile":
-          return <UserProfile />;
+          return <LazySection componentName="UserProfile" />;
         case "nutrition":
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <EnhancedNutritionTracker />
+                <LazySection componentName="EnhancedNutritionTracker" />
               </div>
             </section>
           );
         case "community":
-          return (
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
-              <div className="max-w-7xl mx-auto">
-                <SocialHub />
-              </div>
-            </section>
-          );
         case "social":
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <SocialHub />
+                <LazySection componentName="SocialHub" />
               </div>
             </section>
           );
@@ -131,7 +107,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <GameDashboard />
+                <LazySection componentName="GameDashboard" />
               </div>
             </section>
           );
@@ -139,7 +115,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <MobileFeatures />
+                <LazySection componentName="MobileFeatures" />
               </div>
             </section>
           );
@@ -147,7 +123,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <DetailedAnalytics />
+                <LazySection componentName="DetailedAnalytics" />
               </div>
             </section>
           );
@@ -155,7 +131,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <AIDashboard />
+                <LazySection componentName="AIDashboard" />
               </div>
             </section>
           );
@@ -163,7 +139,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <IntegrationHub />
+                <LazySection componentName="IntegrationHub" />
               </div>
             </section>
           );
@@ -171,7 +147,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <PremiumFeatures />
+                <LazySection componentName="PremiumFeatures" />
               </div>
             </section>
           );
@@ -179,7 +155,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <TrainerConnection />
+                <LazySection componentName="TrainerConnection" />
               </div>
             </section>
           );
@@ -187,7 +163,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <SkillMastery />
+                <LazySection componentName="SkillMastery" />
               </div>
             </section>
           );
@@ -195,7 +171,7 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <SmartWorkoutIntelligence />
+                <LazySection componentName="SmartWorkoutIntelligence" />
               </div>
             </section>
           );
@@ -203,22 +179,24 @@ const Index = () => {
           return (
             <section className="py-20 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <AppPermissions />
+                <LazySection componentName="AppPermissions" />
               </div>
             </section>
           );
         default:
           return (
             <>
-              <Hero />
+              <Suspense fallback={<Loading variant="section" />}>
+                <Hero />
+              </Suspense>
               <section className="py-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
-                  <WorkoutTemplates />
+                  <LazySection componentName="WorkoutTemplates" />
                 </div>
               </section>
-              <WorkoutCategories />
-              <FeaturedExercises />
-              <TrainingSchedules />
+              <LazySection componentName="WorkoutCategories" />
+              <LazySection componentName="FeaturedExercises" />
+              <LazySection componentName="TrainingSchedules" />
             </>
           );
       }
@@ -233,11 +211,7 @@ const Index = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen gradient-black-burgundy flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
+    return <Loading />;
   }
 
   console.log("Rendering Index component");
