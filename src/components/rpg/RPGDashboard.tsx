@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { User, Trophy, Star, Target, Gift, Zap } from 'lucide-react';
 import XPProgressBar from './XPProgressBar';
 import AvatarCustomizer from './AvatarCustomizer';
+import SkillRequirements from './SkillRequirements';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { useToast } from '@/hooks/use-toast';
@@ -28,6 +28,7 @@ const RPGDashboard = () => {
   const [activeTab, setActiveTab] = useState('character');
   const [userBadges, setUserBadges] = useState<BadgeData[]>([]);
   const [xpRewards, setXpRewards] = useState<XPReward[]>([]);
+  const [currentLevel, setCurrentLevel] = useState(1);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -56,8 +57,16 @@ const RPGDashboard = () => {
       .select('*')
       .order('base_xp', { ascending: false });
 
+    // Fetch user progression
+    const { data: progression } = await supabase
+      .from('user_progression')
+      .select('level')
+      .eq('user_id', user.id)
+      .single();
+
     if (badges) setUserBadges(badges);
     if (rewards) setXpRewards(rewards);
+    if (progression) setCurrentLevel(progression.level);
     
     setLoading(false);
   };
@@ -110,10 +119,14 @@ const RPGDashboard = () => {
 
       {/* Main RPG Dashboard */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 bg-slate-800/50">
+        <TabsList className="grid w-full grid-cols-5 bg-slate-800/50">
           <TabsTrigger value="character" className="text-white flex items-center gap-2">
             <User className="h-4 w-4" />
             Character
+          </TabsTrigger>
+          <TabsTrigger value="skills" className="text-white flex items-center gap-2">
+            <Target className="h-4 w-4" />
+            Skills
           </TabsTrigger>
           <TabsTrigger value="badges" className="text-white flex items-center gap-2">
             <Trophy className="h-4 w-4" />
@@ -131,6 +144,10 @@ const RPGDashboard = () => {
 
         <TabsContent value="character" className="mt-6">
           <AvatarCustomizer onAvatarUpdate={fetchUserData} />
+        </TabsContent>
+
+        <TabsContent value="skills" className="mt-6">
+          <SkillRequirements currentLevel={currentLevel} />
         </TabsContent>
 
         <TabsContent value="badges" className="mt-6">

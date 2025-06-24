@@ -46,6 +46,43 @@ export const useRPGSystem = () => {
     }
   }, [user]);
 
+  const checkSkillRequirements = async (targetLevel: number): Promise<boolean> => {
+    if (!user) return false;
+
+    // Define skill requirements for each level milestone
+    const skillRequirements: { [key: number]: string[] } = {
+      11: ['l-sit', 'pistol-squat'],
+      21: ['strict-pullup', 'parallel-dips'],
+      31: ['muscle-up', 'handstand-pushup', 'front-lever'],
+      41: ['one-arm-pullup', 'planche', 'human-flag'],
+      51: ['iron-cross', 'one-arm-handstand']
+    };
+
+    const requiredSkills = skillRequirements[targetLevel];
+    if (!requiredSkills) return true; // No requirements for this level
+
+    // Check if user has completed all required skills
+    const { data: completedSkills } = await supabase
+      .from('skill_completions')
+      .select('skill_id')
+      .eq('user_id', user.id)
+      .in('skill_id', requiredSkills);
+
+    const completedSkillIds = completedSkills?.map(s => s.skill_id) || [];
+    const hasAllSkills = requiredSkills.every(skill => completedSkillIds.includes(skill));
+
+    if (!hasAllSkills) {
+      const missingSkills = requiredSkills.filter(skill => !completedSkillIds.includes(skill));
+      toast({
+        title: "Skill Requirements Not Met",
+        description: `To reach Level ${targetLevel}, you must complete: ${missingSkills.join(', ')}`,
+        variant: "destructive"
+      });
+    }
+
+    return hasAllSkills;
+  };
+
   const awardXP = async (actionType: string, multiplier: number = 1.0) => {
     if (!user) return;
 
@@ -65,12 +102,23 @@ export const useRPGSystem = () => {
       const result = data[0];
       
       if (result.leveled_up) {
-        setLevelUpData({
-          newLevel: result.new_level,
-          newTitle: getTitle(result.new_level),
-          xpGained: result.xp_gained
-        });
-        setShowLevelUp(true);
+        // Check skill requirements before allowing level up
+        const canLevelUp = await checkSkillRequirements(result.new_level);
+        
+        if (canLevelUp) {
+          setLevelUpData({
+            newLevel: result.new_level,
+            newTitle: getTitle(result.new_level),
+            xpGained: result.xp_gained
+          });
+          setShowLevelUp(true);
+        } else {
+          // Award XP but don't level up - cap at previous level
+          toast({
+            title: "XP Earned! ⭐",
+            description: `You gained ${result.xp_gained} XP! Complete skill requirements to level up.`,
+          });
+        }
       } else {
         toast({
           title: "XP Earned! ⭐",
@@ -106,12 +154,12 @@ export const useRPGSystem = () => {
   };
 
   const getTitle = (level: number): string => {
-    if (level >= 50) return 'Fitness Legend';
-    if (level >= 40) return 'Elite Athlete';
-    if (level >= 30) return 'Fitness Master';
-    if (level >= 20) return 'Advanced Trainee';
+    if (level >= 50) return 'Legendary Master';
+    if (level >= 40) return 'Elite Performer';
+    if (level >= 30) return 'Movement Master';
+    if (level >= 20) return 'Strength Adept';
     if (level >= 15) return 'Dedicated Athlete';
-    if (level >= 10) return 'Fitness Enthusiast';
+    if (level >= 10) return 'Skill Initiate';
     if (level >= 5) return 'Active Member';
     return 'Novice';
   };
@@ -129,6 +177,7 @@ export const useRPGSystem = () => {
     awardXP,
     awardBadge,
     fetchRPGData,
+    checkSkillRequirements,
     closeLevelUp: () => setShowLevelUp(false)
   };
 };
