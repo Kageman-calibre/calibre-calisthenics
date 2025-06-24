@@ -187,6 +187,30 @@ export type Database = {
         }
         Relationships: []
       }
+      skill_completions: {
+        Row: {
+          completed_at: string | null
+          id: string
+          notes: string | null
+          skill_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          id?: string
+          notes?: string | null
+          skill_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          id?: string
+          notes?: string | null
+          skill_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       training_cycles: {
         Row: {
           created_at: string

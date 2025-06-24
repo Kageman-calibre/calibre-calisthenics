@@ -61,26 +61,36 @@ export const useRPGSystem = () => {
     const requiredSkills = skillRequirements[targetLevel];
     if (!requiredSkills) return true; // No requirements for this level
 
-    // Check if user has completed all required skills
-    const { data: completedSkills } = await supabase
-      .from('skill_completions')
-      .select('skill_id')
-      .eq('user_id', user.id)
-      .in('skill_id', requiredSkills);
+    try {
+      // Check if user has completed all required skills
+      const { data: completedSkills, error } = await supabase
+        .from('skill_completions')
+        .select('skill_id')
+        .eq('user_id', user.id)
+        .in('skill_id', requiredSkills);
 
-    const completedSkillIds = completedSkills?.map(s => s.skill_id) || [];
-    const hasAllSkills = requiredSkills.every(skill => completedSkillIds.includes(skill));
+      if (error) {
+        console.error('Error checking skill requirements:', error);
+        return false;
+      }
 
-    if (!hasAllSkills) {
-      const missingSkills = requiredSkills.filter(skill => !completedSkillIds.includes(skill));
-      toast({
-        title: "Skill Requirements Not Met",
-        description: `To reach Level ${targetLevel}, you must complete: ${missingSkills.join(', ')}`,
-        variant: "destructive"
-      });
+      const completedSkillIds = completedSkills?.map(s => s.skill_id) || [];
+      const hasAllSkills = requiredSkills.every(skill => completedSkillIds.includes(skill));
+
+      if (!hasAllSkills) {
+        const missingSkills = requiredSkills.filter(skill => !completedSkillIds.includes(skill));
+        toast({
+          title: "Skill Requirements Not Met",
+          description: `To reach Level ${targetLevel}, you must complete: ${missingSkills.join(', ')}`,
+          variant: "destructive"
+        });
+      }
+
+      return hasAllSkills;
+    } catch (error) {
+      console.error('Error in checkSkillRequirements:', error);
+      return false;
     }
-
-    return hasAllSkills;
   };
 
   const awardXP = async (actionType: string, multiplier: number = 1.0) => {

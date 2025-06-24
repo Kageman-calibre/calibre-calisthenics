@@ -185,13 +185,19 @@ const SkillRequirements = ({ currentLevel }: SkillRequirementsProps) => {
   const fetchCompletedSkills = async () => {
     if (!user) return;
 
-    const { data } = await supabase
-      .from('skill_completions')
-      .select('skill_id')
-      .eq('user_id', user.id);
+    try {
+      const { data, error } = await supabase
+        .from('skill_completions')
+        .select('skill_id')
+        .eq('user_id', user.id);
 
-    if (data) {
-      setCompletedSkills(new Set(data.map(item => item.skill_id)));
+      if (error) {
+        console.error('Error fetching skill completions:', error);
+      } else if (data) {
+        setCompletedSkills(new Set(data.map(item => item.skill_id)));
+      }
+    } catch (error) {
+      console.error('Error in fetchCompletedSkills:', error);
     }
     
     setLoading(false);
@@ -200,19 +206,25 @@ const SkillRequirements = ({ currentLevel }: SkillRequirementsProps) => {
   const markSkillComplete = async (skillId: string) => {
     if (!user) return;
 
-    const { error } = await supabase
-      .from('skill_completions')
-      .insert({
-        user_id: user.id,
-        skill_id: skillId
-      });
+    try {
+      const { error } = await supabase
+        .from('skill_completions')
+        .insert({
+          user_id: user.id,
+          skill_id: skillId
+        });
 
-    if (!error) {
-      setCompletedSkills(prev => new Set([...prev, skillId]));
-      toast({
-        title: "Skill Completed! 🎉",
-        description: "Great job! You've mastered this movement.",
-      });
+      if (!error) {
+        setCompletedSkills(prev => new Set([...prev, skillId]));
+        toast({
+          title: "Skill Completed! 🎉",
+          description: "Great job! You've mastered this movement.",
+        });
+      } else {
+        console.error('Error marking skill complete:', error);
+      }
+    } catch (error) {
+      console.error('Error in markSkillComplete:', error);
     }
   };
 
