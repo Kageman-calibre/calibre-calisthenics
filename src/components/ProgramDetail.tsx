@@ -1,4 +1,3 @@
-
 import { ArrowLeft, Clock, Target, Users, Play, CheckCircle } from "lucide-react";
 
 interface WorkoutDay {
@@ -31,7 +30,7 @@ const ProgramDetail = () => {
       duration: "40 min",
       exercises: 7,
       muscleGroups: ["Lats", "Rhomboids", "Biceps", "Rear Delts"],
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      image: "https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       completed: true
     },
     {
@@ -41,7 +40,7 @@ const ProgramDetail = () => {
       duration: "50 min", 
       exercises: 9,
       muscleGroups: ["Quads", "Glutes", "Hamstrings", "Calves"],
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+      image: "https://images.unsplash.com/photo-1434608519344-49d77a699e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     },
     {
       id: "week1-skills",
@@ -50,7 +49,7 @@ const ProgramDetail = () => {
       duration: "35 min",
       exercises: 6,
       muscleGroups: ["Shoulders", "Core", "Wrists", "Balance"],
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+      image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
     }
   ];
 

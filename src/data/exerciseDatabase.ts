@@ -1,4 +1,3 @@
-
 export interface Exercise {
   id: string;
   name: string;
@@ -83,7 +82,7 @@ export const exerciseDatabase: Exercise[] = [
     reps: "5-12",
     restTime: "90s",
     calories: 12,
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    image: "https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
   },
   {
     id: "squats",
@@ -115,7 +114,7 @@ export const exerciseDatabase: Exercise[] = [
     reps: "15-20",
     restTime: "45s",
     calories: 6,
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    image: "https://images.unsplash.com/photo-1434608519344-49d77a699e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
   },
   {
     id: "plank",
@@ -148,7 +147,7 @@ export const exerciseDatabase: Exercise[] = [
     restTime: "30s",
     calories: 4,
     duration: "30-60s",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    image: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
   },
   {
     id: "handstand-hold",
@@ -181,7 +180,7 @@ export const exerciseDatabase: Exercise[] = [
     restTime: "120s",
     calories: 8,
     duration: "15-30s",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
   }
 ];
 
