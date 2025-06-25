@@ -1,9 +1,10 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Zap, Target, Users, Star, Play } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 interface WorkoutTemplate {
   id: string;
@@ -23,6 +24,23 @@ interface WorkoutTemplate {
 const WorkoutTemplates = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const startWorkout = (template: WorkoutTemplate) => {
+    toast({
+      title: "Starting Workout! 🔥",
+      description: `Get ready for ${template.name} - ${template.duration} minutes of training!`,
+    });
+    
+    // Navigate to studio page with template data
+    navigate('/studio', { 
+      state: { 
+        template: template,
+        mode: 'template'
+      } 
+    });
+  };
 
   const templates: WorkoutTemplate[] = [
     {
@@ -235,7 +253,10 @@ const WorkoutTemplates = () => {
                 </div>
               )}
 
-              <Button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
+              <Button 
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                onClick={() => startWorkout(template)}
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Start Workout
               </Button>
