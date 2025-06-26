@@ -1,5 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { Menu, X, User, LogOut, Gamepad2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useAuth } from "./auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -60,13 +62,13 @@ const Navigation = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <a href="/" className="flex items-center">
+              <Link to="/" className="flex items-center">
                 <img 
                   src="/lovable-uploads/b99fef11-6aaf-4783-9d1e-a21e1985649b.png" 
                   alt="Calibre Calisthenics Logo" 
                   className="h-10 w-auto"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Desktop Menu */}
@@ -75,14 +77,14 @@ const Navigation = () => {
                 {navigationItems.map((item) => {
                   const IconComponent = item.icon;
                   return (
-                    <a
+                    <Link
                       key={item.name}
-                      href={item.href}
+                      to={item.href}
                       className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2"
                     >
                       {IconComponent && <IconComponent className="h-4 w-4" />}
                       {item.name}
-                    </a>
+                    </Link>
                   );
                 })}
               </div>
@@ -112,13 +114,13 @@ const Navigation = () => {
                   </button>
                 </div>
               ) : (
-                <a
-                  href="/auth"
+                <Link
+                  to="/auth"
                   className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
                 >
                   <User className="h-4 w-4" />
                   <span>Sign In</span>
-                </a>
+                </Link>
               )}
             </div>
 
@@ -145,15 +147,15 @@ const Navigation = () => {
               {navigationItems.map((item) => {
                 const IconComponent = item.icon;
                 return (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
+                    to={item.href}
                     className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors flex items-center gap-2"
                     onClick={() => setIsOpen(false)}
                   >
                     {IconComponent && <IconComponent className="h-4 w-4" />}
                     {item.name}
-                  </a>
+                  </Link>
                 );
               })}
               
@@ -183,14 +185,14 @@ const Navigation = () => {
                     </button>
                   </>
                 ) : (
-                  <a
-                    href="/auth"
+                  <Link
+                    to="/auth"
                     className="flex items-center space-x-2 text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     <User className="h-4 w-4" />
                     <span>Sign In</span>
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>
