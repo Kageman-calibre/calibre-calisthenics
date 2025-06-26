@@ -50,13 +50,10 @@ const Hero = () => {
               </>
             ) : (
               <>
-                <Link
-                  to="/auth"
-                  className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3"
-                >
+                <button className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3">
                   <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
                   <span className="text-lg">Start Your Journey</span>
-                </Link>
+                </button>
                 
                 <button className="group border-2 border-gold hover:border-white text-gold hover:text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3">
                   <span className="text-lg">Explore Programs</span>
@@ -67,7 +64,7 @@ const Hero = () => {
           </div>
         </div>
         
-        {/* Stats section */}
+        {/* Stats section - simplified for performance */}
         <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center group">
             <div className="bg-black/40 backdrop-blur-lg rounded-2xl p-8 border border-gold/20 hover:border-gold/40 transition-all duration-500 hover:transform hover:scale-105">

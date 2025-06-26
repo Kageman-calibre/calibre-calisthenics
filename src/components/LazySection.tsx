@@ -8,7 +8,14 @@ interface LazySectionProps {
   fallback?: React.ReactNode;
 }
 
-const LazySection = memo(({ componentName, fallback }: LazySectionProps) => {
+// Cache for lazy-loaded components to avoid repeated imports
+const componentCache = new Map<string, React.LazyExoticComponent<React.ComponentType<any>>>();
+
+const getComponent = (componentName: string) => {
+  if (componentCache.has(componentName)) {
+    return componentCache.get(componentName)!;
+  }
+
   const Component = lazy(() => {
     switch (componentName) {
       case 'WorkoutCategories':
@@ -55,6 +62,13 @@ const LazySection = memo(({ componentName, fallback }: LazySectionProps) => {
         throw new Error(`Component ${componentName} not found`);
     }
   });
+
+  componentCache.set(componentName, Component);
+  return Component;
+};
+
+const LazySection = memo(({ componentName, fallback }: LazySectionProps) => {
+  const Component = getComponent(componentName);
 
   return (
     <ErrorBoundary>
