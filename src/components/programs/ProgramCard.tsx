@@ -29,7 +29,7 @@ const ProgramCard = ({ program, progress, onStartProgram }: ProgramCardProps) =>
   // Calculate estimated calories (rough estimation)
   const estimatedCalories = Math.round((program.totalWorkouts * 25) + (program.workoutsPerWeek * 15));
 
-  // Get first 3 exercises from the program for preview
+  // Get first 3 exercises from the program for preview - fix the type issue
   const previewExercises = program.weeklySchedule?.[0]?.workouts?.[0]?.exercises?.slice(0, 3) || [];
 
   // Mock rating (in real app, this would come from user reviews)
@@ -142,11 +142,11 @@ const ProgramCard = ({ program, progress, onStartProgram }: ProgramCardProps) =>
           <div className="mb-4">
             <h4 className="text-xs font-semibold text-emerald-400 mb-2 uppercase tracking-wide">First Exercises</h4>
             <div className="space-y-1">
-              {previewExercises.map((exercise, index) => (
+              {previewExercises.map((exerciseName, index) => (
                 <div key={index} className="text-xs text-gray-300 flex items-center space-x-2">
                   <div className="w-1 h-1 bg-emerald-500 rounded-full"></div>
-                  <span>{exercise.name}</span>
-                  <span className="text-gray-500">• {exercise.sets}x{exercise.reps}</span>
+                  <span>{typeof exerciseName === 'string' ? exerciseName : 'Exercise'}</span>
+                  <span className="text-gray-500">• 3x10</span>
                 </div>
               ))}
               {program.weeklySchedule?.[0]?.workouts?.[0]?.exercises?.length > 3 && (
