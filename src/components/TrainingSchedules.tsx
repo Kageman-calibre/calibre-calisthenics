@@ -1,5 +1,6 @@
 
 import { Calendar, Clock, Target, Users, ChevronRight, Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Program {
   id: string;
@@ -12,10 +13,26 @@ interface Program {
   image: string;
   tags: string[];
   color: string;
+  route?: string;
 }
 
 const TrainingSchedules = () => {
+  const navigate = useNavigate();
+
   const programs: Program[] = [
+    {
+      id: "beginner-collection",
+      name: "Beginner Collection",
+      description: "Choose from 24 different beginner programs tailored to your specific goals and preferences.",
+      duration: "4-12 weeks",
+      level: "Beginner",
+      workoutsPerWeek: 2,
+      totalWorkouts: 24,
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      tags: ["Variety", "Flexible", "Comprehensive"],
+      color: "from-emerald-500 to-green-600",
+      route: "/beginner-programs"
+    },
     {
       id: "foundation",
       name: "Foundation Builder",
@@ -63,6 +80,15 @@ const TrainingSchedules = () => {
     }
   };
 
+  const handleProgramClick = (program: Program) => {
+    if (program.route) {
+      navigate(program.route);
+    } else {
+      // Handle other program navigation
+      console.log(`Navigate to program: ${program.id}`);
+    }
+  };
+
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -83,11 +109,12 @@ const TrainingSchedules = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8">
           {programs.map((program) => (
             <div
               key={program.id}
               className="group bg-gradient-to-br from-slate-800/60 to-slate-700/40 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-600/30 hover:border-orange-500/40 transition-all duration-500 transform hover:scale-[1.02] cursor-pointer"
+              onClick={() => handleProgramClick(program)}
             >
               <div className="relative">
                 <img
