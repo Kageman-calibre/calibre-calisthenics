@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
 
-interface AvatarConfig {
+export interface AvatarConfig {
   gender: 'male' | 'female';
   skinTone: string;
   hairstyle: string;
