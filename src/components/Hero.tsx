@@ -17,7 +17,7 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-gold/10 border border-gold/30 rounded-full px-4 py-2 mb-8 animate-fade-in">
             <Star className="h-4 w-4 text-gold" />
-            <span className="text-gold text-sm font-medium">Trusted by 100K+ Athletes</span>
+            <span className="text-gold text-sm font-medium">Professional Calisthenics Training</span>
           </div>
 
           <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-tight animate-fade-in">
@@ -64,15 +64,15 @@ const Hero = () => {
           </div>
         </div>
         
-        {/* Stats section - simplified for performance */}
+        {/* Features Grid - honest information */}
         <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center group">
             <div className="bg-black/40 backdrop-blur-lg rounded-2xl p-8 border border-gold/20 hover:border-gold/40 transition-all duration-500 hover:transform hover:scale-105">
               <div className="inline-flex items-center justify-center w-16 h-16 gradient-gold-burgundy rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                 <Users className="h-8 w-8 text-black" />
               </div>
-              <div className="text-4xl font-bold text-white mb-2">100K+</div>
-              <div className="text-white/80 text-lg">Active Members</div>
+              <div className="text-4xl font-bold text-white mb-2">Growing</div>
+              <div className="text-white/80 text-lg">Community</div>
             </div>
           </div>
           
@@ -81,8 +81,8 @@ const Hero = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-burgundy rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                 <Award className="h-8 w-8 text-white" />
               </div>
-              <div className="text-4xl font-bold text-white mb-2">500+</div>
-              <div className="text-white/80 text-lg">Expert Programs</div>
+              <div className="text-4xl font-bold text-white mb-2">Expert</div>
+              <div className="text-white/80 text-lg">Programs</div>
             </div>
           </div>
           
@@ -91,8 +91,8 @@ const Hero = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gold rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                 <Star className="h-8 w-8 text-black" />
               </div>
-              <div className="text-4xl font-bold text-white mb-2">4.9/5</div>
-              <div className="text-white/80 text-lg">User Rating</div>
+              <div className="text-4xl font-bold text-white mb-2">Quality</div>
+              <div className="text-white/80 text-lg">Training</div>
             </div>
           </div>
         </div>

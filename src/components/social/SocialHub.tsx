@@ -85,34 +85,34 @@ const SocialHub = () => {
         </p>
       </div>
 
-      {/* Community Stats */}
+      {/* Community Stats - Updated with honest numbers */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-slate-600/30">
           <CardContent className="p-6 text-center">
             <Users className="h-8 w-8 text-blue-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-white">2,458</div>
-            <div className="text-sm text-gray-400">Active Members</div>
+            <div className="text-2xl font-bold text-white">Growing</div>
+            <div className="text-sm text-gray-400">Community</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-slate-600/30">
           <CardContent className="p-6 text-center">
             <Trophy className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-white">1,234</div>
-            <div className="text-sm text-gray-400">Workouts Today</div>
+            <div className="text-2xl font-bold text-white">Daily</div>
+            <div className="text-sm text-gray-400">Workouts</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-slate-600/30">
           <CardContent className="p-6 text-center">
             <Heart className="h-8 w-8 text-red-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-white">5,678</div>
-            <div className="text-sm text-gray-400">Likes Given</div>
+            <div className="text-2xl font-bold text-white">Support</div>
+            <div className="text-sm text-gray-400">& Motivation</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-slate-600/30">
           <CardContent className="p-6 text-center">
             <Star className="h-8 w-8 text-purple-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-white">892</div>
-            <div className="text-sm text-gray-400">Achievements</div>
+            <div className="text-2xl font-bold text-white">Quality</div>
+            <div className="text-sm text-gray-400">Programs</div>
           </CardContent>
         </Card>
       </div>
