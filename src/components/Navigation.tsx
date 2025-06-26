@@ -1,15 +1,17 @@
-
 import { useState, useEffect } from "react";
 import { Menu, X, User, LogOut, Gamepad2 } from "lucide-react";
 import { useAuth } from "./auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useUserAvatar } from "@/hooks/useUserAvatar";
+import RealisticAvatarDisplay from "./rpg/avatar/RealisticAvatarDisplay";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const { user } = useAuth();
   const { toast } = useToast();
+  const { avatarConfig } = useUserAvatar();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,9 +92,17 @@ const Navigation = () => {
             <div className="hidden md:flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-3">
-                  <span className="text-gray-300 text-sm">
-                    Welcome, {user.email?.split('@')[0]}
-                  </span>
+                  {/* User Avatar */}
+                  <div className="flex items-center space-x-2">
+                    <RealisticAvatarDisplay 
+                      config={avatarConfig} 
+                      size="small" 
+                      showBackground={true}
+                    />
+                    <span className="text-gray-300 text-sm">
+                      {user.email?.split('@')[0]}
+                    </span>
+                  </div>
                   <button
                     onClick={handleSignOut}
                     className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
@@ -151,8 +161,15 @@ const Navigation = () => {
               <div className="border-t border-slate-700 pt-4">
                 {user ? (
                   <>
-                    <div className="px-3 py-2 text-gray-300 text-sm">
-                      {user.email?.split('@')[0]}
+                    <div className="flex items-center px-3 py-2 space-x-2">
+                      <RealisticAvatarDisplay 
+                        config={avatarConfig} 
+                        size="small" 
+                        showBackground={true}
+                      />
+                      <div className="text-gray-300 text-sm">
+                        {user.email?.split('@')[0]}
+                      </div>
                     </div>
                     <button
                       onClick={() => {

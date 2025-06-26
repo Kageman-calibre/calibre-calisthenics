@@ -112,6 +112,8 @@ const EnhancedAvatarCustomizer = ({ onAvatarUpdate }: EnhancedAvatarCustomizerPr
         description: "Your character has been customized successfully"
       });
       onAvatarUpdate?.();
+      // Trigger a page refresh to update the navigation avatar
+      window.location.reload();
     }
     setLoading(false);
   };
