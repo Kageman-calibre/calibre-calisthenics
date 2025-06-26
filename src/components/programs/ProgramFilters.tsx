@@ -47,7 +47,7 @@ const ProgramFilters = ({
   totalCount,
   onClearFilters
 }: ProgramFiltersProps) => {
-  const hasActiveFilters = searchTerm || selectedFocus !== "all" || selectedDuration !== "all" || selectedEquipment !== "all" || selectedTimeRange !== "all" || showCompletedOnly;
+  const hasActiveFilters: boolean = Boolean(searchTerm) || selectedFocus !== "all" || selectedDuration !== "all" || selectedEquipment !== "all" || selectedTimeRange !== "all" || showCompletedOnly;
 
   const activeFilterCount = [
     Boolean(searchTerm),
