@@ -8,6 +8,7 @@ import ExerciseProgress from "./ExerciseProgress";
 import WorkoutNavigation from "./WorkoutNavigation";
 import WorkoutPreparation from "./workout/WorkoutPreparation";
 import ExerciseAdjustment from "./workout/ExerciseAdjustment";
+import WorkoutFinishConfirmation from "./workout/WorkoutFinishConfirmation";
 import { useWorkoutProgress } from "./WorkoutProgress";
 import { useRPGSystem } from "@/hooks/useRPGSystem";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +21,7 @@ const WorkoutDetail = () => {
   const [completedSets, setCompletedSets] = useState<number[]>([]);
   const [showPreparation, setShowPreparation] = useState(true);
   const [showAdjustments, setShowAdjustments] = useState(false);
+  const [showFinishConfirmation, setShowFinishConfirmation] = useState(false);
   const [workoutStarted, setWorkoutStarted] = useState(false);
   const { addWorkoutSession } = useWorkoutProgress();
   const { awardXP, awardBadge } = useRPGSystem();
@@ -66,6 +68,39 @@ const WorkoutDetail = () => {
   const handleCancelAdjustments = () => {
     setShowAdjustments(false);
     setShowPreparation(true);
+  };
+
+  const handleFinishWorkout = () => {
+    setShowFinishConfirmation(true);
+  };
+
+  const handleFinishConfirmed = () => {
+    setShowFinishConfirmation(false);
+    handleWorkoutComplete();
+  };
+
+  const handleFinishCancelled = () => {
+    setShowFinishConfirmation(false);
+  };
+
+  const getWorkoutDuration = () => {
+    if (!workoutStartTime) return "0:00";
+    const duration = Math.floor((new Date().getTime() - workoutStartTime.getTime()) / (1000 * 60));
+    const hours = Math.floor(duration / 60);
+    const minutes = duration % 60;
+    return hours > 0 ? `${hours}:${minutes.toString().padStart(2, '0')}` : `${minutes}:00`;
+  };
+
+  const getCompletedExercisesCount = () => {
+    let completedExercises = 0;
+    exercises.forEach((exercise, index) => {
+      const exerciseCompleted = [...Array(exercise.sets)].every((_, setIndex) => {
+        const setKey = index * 10 + (setIndex + 1);
+        return completedSets.includes(setKey);
+      });
+      if (exerciseCompleted) completedExercises++;
+    });
+    return completedExercises;
   };
 
   const exercisesForAdjustment = exercises.map(ex => ({
@@ -190,67 +225,80 @@ const WorkoutDetail = () => {
   }
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <button className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
-            <ArrowLeft className="h-5 w-5" />
-            <span>Back to Program</span>
-          </button>
-          
-          <div className="flex items-center space-x-4">
-            <div className="text-sm font-medium text-orange-400">
-              Exercise {currentExercise + 1} of {exercises.length}
-            </div>
-            <div className="text-sm text-gray-400">
-              Set {currentSet} of {currentEx.sets}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-12">
-          <div>
-            <ExerciseCard 
-              exercise={currentEx} 
-              showDetails={true}
-            />
+    <>
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <button className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Program</span>
+            </button>
             
-            <WorkoutNavigation
-              currentExercise={currentExercise}
-              totalExercises={exercises.length}
-              onPrevious={handlePreviousExercise}
-              onNext={handleNextExercise}
-            />
+            <div className="flex items-center space-x-4">
+              <div className="text-sm font-medium text-orange-400">
+                Exercise {currentExercise + 1} of {exercises.length}
+              </div>
+              <div className="text-sm text-gray-400">
+                Set {currentSet} of {currentEx.sets}
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-8">
-            {isResting ? (
-              <EnhancedWorkoutTimer
-                initialTime={getRestTime(currentExercise)}
-                onComplete={handleTimerComplete}
-                autoStart={true}
-                title="Rest Time"
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+              <ExerciseCard 
+                exercise={currentEx} 
+                showDetails={true}
               />
-            ) : (
-              <WorkoutControls
-                currentSet={currentSet}
-                totalSets={currentEx.sets}
-                reps={currentEx.reps}
-                restTime={currentEx.restTime}
-                onCompleteSet={handleCompleteSet}
+              
+              <WorkoutNavigation
+                currentExercise={currentExercise}
+                totalExercises={exercises.length}
+                onPrevious={handlePreviousExercise}
+                onNext={handleNextExercise}
               />
-            )}
+            </div>
 
-            <ExerciseProgress
-              exercises={exercises}
-              completedSets={completedSets}
-              currentExercise={currentExercise}
-              currentSet={currentSet}
-            />
+            <div className="space-y-8">
+              {isResting ? (
+                <EnhancedWorkoutTimer
+                  initialTime={getRestTime(currentExercise)}
+                  onComplete={handleTimerComplete}
+                  autoStart={true}
+                  title="Rest Time"
+                />
+              ) : (
+                <WorkoutControls
+                  currentSet={currentSet}
+                  totalSets={currentEx.sets}
+                  reps={currentEx.reps}
+                  restTime={currentEx.restTime}
+                  onCompleteSet={handleCompleteSet}
+                  onFinishWorkout={handleFinishWorkout}
+                />
+              )}
+
+              <ExerciseProgress
+                exercises={exercises}
+                completedSets={completedSets}
+                currentExercise={currentExercise}
+                currentSet={currentSet}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {showFinishConfirmation && (
+        <WorkoutFinishConfirmation
+          onConfirm={handleFinishConfirmed}
+          onCancel={handleFinishCancelled}
+          completedExercises={getCompletedExercisesCount()}
+          totalExercises={exercises.length}
+          workoutDuration={getWorkoutDuration()}
+        />
+      )}
+    </>
   );
 };
 

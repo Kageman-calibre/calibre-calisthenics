@@ -1,5 +1,5 @@
 
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Flag } from "lucide-react";
 
 interface WorkoutControlsProps {
   currentSet: number;
@@ -7,6 +7,7 @@ interface WorkoutControlsProps {
   reps: string;
   restTime: string;
   onCompleteSet: () => void;
+  onFinishWorkout: () => void;
 }
 
 const WorkoutControls = ({ 
@@ -14,7 +15,8 @@ const WorkoutControls = ({
   totalSets, 
   reps, 
   restTime, 
-  onCompleteSet 
+  onCompleteSet,
+  onFinishWorkout
 }: WorkoutControlsProps) => {
   return (
     <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 backdrop-blur-lg rounded-2xl p-6 border border-slate-600/30">
@@ -28,13 +30,23 @@ const WorkoutControls = ({
         </div>
       </div>
       
-      <button
-        onClick={onCompleteSet}
-        className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-medium py-4 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
-      >
-        <CheckCircle className="h-5 w-5" />
-        <span>Complete Set</span>
-      </button>
+      <div className="space-y-3">
+        <button
+          onClick={onCompleteSet}
+          className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-medium py-4 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
+        >
+          <CheckCircle className="h-5 w-5" />
+          <span>Complete Set</span>
+        </button>
+        
+        <button
+          onClick={onFinishWorkout}
+          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
+        >
+          <Flag className="h-4 w-4" />
+          <span>Finish Workout</span>
+        </button>
+      </div>
     </div>
   );
 };
