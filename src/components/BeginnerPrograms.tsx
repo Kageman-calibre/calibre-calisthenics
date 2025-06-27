@@ -1,12 +1,16 @@
 
 import { Calendar } from "lucide-react";
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { beginnerPrograms, BeginnerProgram } from "../data/beginnerPrograms";
 import { useProgramProgress } from "../hooks/useProgramProgress";
 import ProgramFilters from "./programs/ProgramFilters";
 import ProgramCard from "./programs/ProgramCard";
 
 const BeginnerPrograms = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFocus, setSelectedFocus] = useState("all");
   const [selectedDuration, setSelectedDuration] = useState("all");
@@ -66,9 +70,25 @@ const BeginnerPrograms = () => {
   const handleStartProgram = async (programId: string) => {
     const program = beginnerPrograms.find(p => p.id === programId);
     if (program) {
-      await updateProgress(programId, program.name);
-      // Here you could also navigate to the program detail page
-      console.log(`Starting program: ${program.name}`);
+      try {
+        await updateProgress(programId, program.name);
+        
+        // Show success toast
+        toast({
+          title: "Program Started! 🎯",
+          description: `You've started "${program.name}". Let's begin your fitness journey!`,
+        });
+        
+        // Navigate to the program detail page or workout studio
+        navigate(`/programs/${programId}`);
+      } catch (error) {
+        console.error('Error starting program:', error);
+        toast({
+          title: "Error",
+          description: "Failed to start the program. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
