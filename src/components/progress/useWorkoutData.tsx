@@ -42,7 +42,6 @@ export const useWorkoutData = () => {
   const fetchWorkoutData = async () => {
     if (!user) return;
 
-    // Fetch workout sessions
     const { data: sessions } = await supabase
       .from('workout_sessions')
       .select('*')
@@ -50,7 +49,6 @@ export const useWorkoutData = () => {
       .order('completed_at', { ascending: false })
       .limit(10);
 
-    // Fetch user stats
     const { data: stats } = await supabase
       .from('user_stats')
       .select('*')
@@ -58,7 +56,6 @@ export const useWorkoutData = () => {
       .single();
 
     if (sessions) {
-      // Type assertion to ensure difficulty is properly typed
       const typedSessions = sessions.map(session => ({
         ...session,
         difficulty: session.difficulty as 'beginner' | 'intermediate' | 'advanced'
@@ -79,7 +76,6 @@ export const useWorkoutData = () => {
   }) => {
     if (!user) return;
 
-    // Add workout session to database
     const { error } = await supabase
       .from('workout_sessions')
       .insert({
@@ -96,29 +92,60 @@ export const useWorkoutData = () => {
       return;
     }
 
-    // Award XP automatically via trigger, but also award badges for milestones
+    // Get updated stats for milestone checking
     const newStats = await fetchUpdatedStats();
     if (newStats) {
-      // Check for milestone badges
+      // Award milestone badges with RPG integration
       if (newStats.total_workouts === 1) {
         awardBadge('first_workout', 'First Steps', 'Completed your first workout!', 'common');
+        awardXP('workout_complete', 1.5); // Bonus XP for first workout
+      } else if (newStats.total_workouts === 5) {
+        awardBadge('habit_former', 'Habit Former', 'Completed 5 workouts!', 'common');
       } else if (newStats.total_workouts === 10) {
         awardBadge('workout_warrior', 'Workout Warrior', 'Completed 10 workouts!', 'uncommon');
+        awardXP('streak_milestone'); // Bonus XP for milestone
+      } else if (newStats.total_workouts === 25) {
+        awardBadge('dedicated_athlete', 'Dedicated Athlete', 'Completed 25 workouts!', 'rare');
+        awardXP('streak_milestone', 1.5);
       } else if (newStats.total_workouts === 50) {
         awardBadge('fitness_enthusiast', 'Fitness Enthusiast', 'Completed 50 workouts!', 'rare');
+        awardXP('streak_milestone', 2.0);
       } else if (newStats.total_workouts === 100) {
         awardBadge('century_club', 'Century Club', 'Completed 100 workouts!', 'epic');
+        awardXP('streak_milestone', 3.0);
       }
 
-      // Check for streak badges
-      if (newStats.current_streak === 7) {
+      // Streak milestone badges
+      if (newStats.current_streak === 3) {
+        awardBadge('streak_starter', 'Streak Starter', '3-day workout streak!', 'common');
+      } else if (newStats.current_streak === 7) {
         awardBadge('week_streak', 'Week Warrior', '7-day workout streak!', 'uncommon');
+        awardXP('streak_milestone');
+      } else if (newStats.current_streak === 14) {
+        awardBadge('two_week_streak', 'Consistency Champion', '14-day workout streak!', 'rare');
+        awardXP('streak_milestone', 1.5);
       } else if (newStats.current_streak === 30) {
         awardBadge('month_streak', 'Monthly Master', '30-day workout streak!', 'epic');
+        awardXP('streak_milestone', 2.5);
+      }
+
+      // Calorie milestone badges
+      if (newStats.total_calories >= 1000 && (newStats.total_calories - session.calories) < 1000) {
+        awardBadge('calorie_killer', 'Calorie Killer', 'Burned 1000+ total calories!', 'uncommon');
+      } else if (newStats.total_calories >= 5000 && (newStats.total_calories - session.calories) < 5000) {
+        awardBadge('calorie_crusher', 'Calorie Crusher', 'Burned 5000+ total calories!', 'rare');
+      } else if (newStats.total_calories >= 10000 && (newStats.total_calories - session.calories) < 10000) {
+        awardBadge('calorie_destroyer', 'Calorie Destroyer', 'Burned 10,000+ total calories!', 'epic');
+      }
+
+      // Duration milestone badges
+      if (newStats.total_minutes >= 300 && (newStats.total_minutes - session.duration) < 300) {
+        awardBadge('time_warrior', 'Time Warrior', '5+ hours of total workout time!', 'uncommon');
+      } else if (newStats.total_minutes >= 1200 && (newStats.total_minutes - session.duration) < 1200) {
+        awardBadge('endurance_master', 'Endurance Master', '20+ hours of total workout time!', 'epic');
       }
     }
 
-    // Refresh data
     fetchWorkoutData();
   };
 

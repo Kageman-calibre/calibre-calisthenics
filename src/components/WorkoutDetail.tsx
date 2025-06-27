@@ -9,6 +9,7 @@ import WorkoutNavigation from "./WorkoutNavigation";
 import WorkoutPreparation from "./workout/WorkoutPreparation";
 import ExerciseAdjustment from "./workout/ExerciseAdjustment";
 import { useWorkoutProgress } from "./WorkoutProgress";
+import { useRPGSystem } from "@/hooks/useRPGSystem";
 import { useToast } from "@/hooks/use-toast";
 
 const WorkoutDetail = () => {
@@ -21,6 +22,7 @@ const WorkoutDetail = () => {
   const [showAdjustments, setShowAdjustments] = useState(false);
   const [workoutStarted, setWorkoutStarted] = useState(false);
   const { addWorkoutSession } = useWorkoutProgress();
+  const { awardXP, awardBadge } = useRPGSystem();
   const { toast } = useToast();
 
   const exerciseIds = ["push-ups", "pull-ups", "squats", "plank"];
@@ -31,6 +33,10 @@ const WorkoutDetail = () => {
     setWorkoutStartTime(new Date());
     setShowPreparation(false);
     setWorkoutStarted(true);
+    
+    // Award XP for starting workout
+    awardXP('daily_login');
+    
     toast({
       title: "Workout Started! 🔥",
       description: "Let's crush this workout together!",
@@ -53,9 +59,8 @@ const WorkoutDetail = () => {
   };
 
   const handleCancelPreparation = () => {
-    // Navigate back or show confirmation
     setShowPreparation(false);
-    setWorkoutStarted(true); // Skip preparation for now
+    setWorkoutStarted(true);
   };
 
   const handleCancelAdjustments = () => {
@@ -63,7 +68,6 @@ const WorkoutDetail = () => {
     setShowPreparation(true);
   };
 
-  // Mock exercise data for adjustments
   const exercisesForAdjustment = exercises.map(ex => ({
     id: ex.id,
     name: ex.name,
@@ -82,6 +86,9 @@ const WorkoutDetail = () => {
     const setKey = currentExercise * 10 + currentSet;
     setCompletedSets(prev => [...prev, setKey]);
     
+    // Award XP for completing a set
+    awardXP('new_exercise', 0.5);
+    
     if (currentSet < currentEx.sets) {
       setCurrentSet(prev => prev + 1);
       setIsResting(true);
@@ -91,6 +98,9 @@ const WorkoutDetail = () => {
         setCurrentExercise(prev => prev + 1);
         setCurrentSet(1);
         setIsResting(true);
+        
+        // Award bonus XP for completing an exercise
+        awardXP('new_exercise');
       } else {
         // Workout complete
         handleWorkoutComplete();
@@ -103,6 +113,7 @@ const WorkoutDetail = () => {
       const duration = Math.floor((new Date().getTime() - workoutStartTime.getTime()) / (1000 * 60));
       const totalCalories = exercises.reduce((sum, ex) => sum + ex.calories, 0);
       
+      // Add workout session
       await addWorkoutSession({
         exercises: exercises.map(ex => ex.name),
         duration,
@@ -111,8 +122,22 @@ const WorkoutDetail = () => {
         programName: 'Default Workout'
       });
 
-      // Show completion message with AI insights hint
-      console.log('Workout completed! Check AI Insights for personalized recommendations.');
+      // Award completion XP and badges
+      awardXP('workout_complete');
+      
+      // Check for milestone badges based on workout stats
+      if (duration >= 45) {
+        awardBadge('endurance_warrior', 'Endurance Warrior', 'Completed a 45+ minute workout!', 'uncommon');
+      }
+      
+      if (totalCalories >= 400) {
+        awardBadge('calorie_crusher', 'Calorie Crusher', 'Burned 400+ calories in one workout!', 'rare');
+      }
+
+      toast({
+        title: "🎉 Workout Complete!",
+        description: `Amazing work! You earned XP and potential new badges. Check your RPG progress!`,
+      });
     }
   };
 
@@ -141,7 +166,6 @@ const WorkoutDetail = () => {
     return <div className="text-white">Loading...</div>;
   }
 
-  // Show preparation flow if workout hasn't started
   if (!workoutStarted) {
     return (
       <>
@@ -167,9 +191,7 @@ const WorkoutDetail = () => {
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8">
-      {/* ... keep existing code (header, exercise details, workout controls) the same */}
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
             <ArrowLeft className="h-5 w-5" />
@@ -187,7 +209,6 @@ const WorkoutDetail = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Exercise Details */}
           <div>
             <ExerciseCard 
               exercise={currentEx} 
@@ -202,9 +223,7 @@ const WorkoutDetail = () => {
             />
           </div>
 
-          {/* Workout Controls */}
           <div className="space-y-8">
-            {/* Timer */}
             {isResting ? (
               <EnhancedWorkoutTimer
                 initialTime={getRestTime(currentExercise)}
@@ -222,7 +241,6 @@ const WorkoutDetail = () => {
               />
             )}
 
-            {/* Set Progress */}
             <ExerciseProgress
               exercises={exercises}
               completedSets={completedSets}
