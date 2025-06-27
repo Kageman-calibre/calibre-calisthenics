@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { beginnerPrograms } from "../data/beginnerPrograms";
@@ -12,6 +11,12 @@ import ExerciseAdjustment from "./workout/ExerciseAdjustment";
 
 const BeginnerPrograms = () => {
   const [filteredPrograms, setFilteredPrograms] = useState(beginnerPrograms);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedFocus, setSelectedFocus] = useState("all");
+  const [selectedDuration, setSelectedDuration] = useState("all");
+  const [selectedEquipment, setSelectedEquipment] = useState("all");
+  const [selectedTimeRange, setSelectedTimeRange] = useState("all");
+  const [showCompletedOnly, setShowCompletedOnly] = useState(false);
   const [showPreparation, setShowPreparation] = useState(false);
   const [showAdjustments, setShowAdjustments] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<any>(null);
@@ -19,6 +24,63 @@ const BeginnerPrograms = () => {
   const { awardXP, awardBadge } = useRPGSystem();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Filter options
+  const focusAreas = ["all", "Strength", "Cardio", "Flexibility", "Full Body"];
+  const durations = ["all", "4 weeks", "6 weeks", "8 weeks", "12 weeks"];
+  const equipment = ["all", "Bodyweight", "Dumbbells", "Gym", "Minimal Equipment"];
+  const timeRanges = ["all", "20-30 min", "30-45 min", "45-60 min", "60+ min"];
+
+  // Apply filters to programs
+  const applyFilters = () => {
+    let filtered = [...beginnerPrograms];
+
+    if (searchTerm) {
+      filtered = filtered.filter(program => 
+        program.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        program.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        program.focus.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (selectedFocus !== "all") {
+      filtered = filtered.filter(program => program.focus === selectedFocus);
+    }
+
+    if (selectedDuration !== "all") {
+      filtered = filtered.filter(program => program.duration === selectedDuration);
+    }
+
+    if (selectedEquipment !== "all") {
+      filtered = filtered.filter(program => program.equipment === selectedEquipment);
+    }
+
+    if (selectedTimeRange !== "all") {
+      filtered = filtered.filter(program => program.timePerWorkout === selectedTimeRange);
+    }
+
+    if (showCompletedOnly) {
+      filtered = filtered.filter(program => 
+        programProgress[program.id]?.isCompleted === true
+      );
+    }
+
+    setFilteredPrograms(filtered);
+  };
+
+  // Apply filters whenever filter state changes
+  React.useEffect(() => {
+    applyFilters();
+  }, [searchTerm, selectedFocus, selectedDuration, selectedEquipment, selectedTimeRange, showCompletedOnly, programProgress]);
+
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setSelectedFocus("all");
+    setSelectedDuration("all");
+    setSelectedEquipment("all");
+    setSelectedTimeRange("all");
+    setShowCompletedOnly(false);
+  };
 
   const handleStartProgram = (programId: string) => {
     const program = beginnerPrograms.find(p => p.id === programId);
@@ -125,7 +187,27 @@ const BeginnerPrograms = () => {
             </p>
           </div>
 
-          <ProgramFilters onFilterChange={setFilteredPrograms} />
+          <ProgramFilters
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            selectedFocus={selectedFocus}
+            setSelectedFocus={setSelectedFocus}
+            selectedDuration={selectedDuration}
+            setSelectedDuration={setSelectedDuration}
+            selectedEquipment={selectedEquipment}
+            setSelectedEquipment={setSelectedEquipment}
+            selectedTimeRange={selectedTimeRange}
+            setSelectedTimeRange={setSelectedTimeRange}
+            showCompletedOnly={showCompletedOnly}
+            setShowCompletedOnly={setShowCompletedOnly}
+            focusAreas={focusAreas}
+            durations={durations}
+            equipment={equipment}
+            timeRanges={timeRanges}
+            filteredCount={filteredPrograms.length}
+            totalCount={beginnerPrograms.length}
+            onClearFilters={handleClearFilters}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPrograms.map((program) => (
