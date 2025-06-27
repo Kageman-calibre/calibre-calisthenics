@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { beginnerPrograms } from "../data/beginnerPrograms";
 import ProgramCard from "./programs/ProgramCard";
@@ -39,12 +40,18 @@ const BeginnerPrograms = () => {
       filtered = filtered.filter(program => 
         program.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         program.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        program.focus.toLowerCase().includes(searchTerm.toLowerCase())
+        (Array.isArray(program.focus) 
+          ? program.focus.some(f => f.toLowerCase().includes(searchTerm.toLowerCase()))
+          : program.focus.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
     if (selectedFocus !== "all") {
-      filtered = filtered.filter(program => program.focus === selectedFocus);
+      filtered = filtered.filter(program => 
+        Array.isArray(program.focus) 
+          ? program.focus.includes(selectedFocus)
+          : program.focus === selectedFocus
+      );
     }
 
     if (selectedDuration !== "all") {
@@ -52,10 +59,15 @@ const BeginnerPrograms = () => {
     }
 
     if (selectedEquipment !== "all") {
-      filtered = filtered.filter(program => program.equipment === selectedEquipment);
+      filtered = filtered.filter(program => 
+        Array.isArray(program.equipment) 
+          ? program.equipment.includes(selectedEquipment)
+          : program.equipment === selectedEquipment
+      );
     }
 
     if (selectedTimeRange !== "all") {
+      // Use the correct property name from the program data
       filtered = filtered.filter(program => program.timePerWorkout === selectedTimeRange);
     }
 
@@ -69,7 +81,7 @@ const BeginnerPrograms = () => {
   };
 
   // Apply filters whenever filter state changes
-  React.useEffect(() => {
+  useEffect(() => {
     applyFilters();
   }, [searchTerm, selectedFocus, selectedDuration, selectedEquipment, selectedTimeRange, showCompletedOnly, programProgress]);
 
