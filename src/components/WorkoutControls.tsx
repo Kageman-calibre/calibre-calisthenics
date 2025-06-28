@@ -8,6 +8,7 @@ interface WorkoutControlsProps {
   restTime: string;
   onCompleteSet: () => void;
   onFinishWorkout: () => void;
+  showFinishButton?: boolean;
 }
 
 const WorkoutControls = ({ 
@@ -16,7 +17,8 @@ const WorkoutControls = ({
   reps, 
   restTime, 
   onCompleteSet,
-  onFinishWorkout
+  onFinishWorkout,
+  showFinishButton = true
 }: WorkoutControlsProps) => {
   return (
     <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 backdrop-blur-lg rounded-2xl p-6 border border-slate-600/30">
@@ -39,13 +41,15 @@ const WorkoutControls = ({
           <span>Complete Set</span>
         </button>
         
-        <button
-          onClick={onFinishWorkout}
-          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
-        >
-          <Flag className="h-4 w-4" />
-          <span>Finish Workout</span>
-        </button>
+        {showFinishButton && (
+          <button
+            onClick={onFinishWorkout}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
+          >
+            <Flag className="h-4 w-4" />
+            <span>Finish Workout</span>
+          </button>
+        )}
       </div>
     </div>
   );
