@@ -111,13 +111,33 @@ const WorkoutTemplates = () => {
   const getExercisesForAdjustment = () => {
     if (!selectedTemplate) return [];
     
-    return selectedTemplate.exercises.map(ex => ({
-      id: ex.id,
-      name: ex.name,
-      defaultSets: ex.sets,
-      defaultReps: ex.reps,
-      defaultRest: ex.restTime
-    }));
+    // Generate mock exercises based on template category and exercise count
+    const mockExercises = [];
+    const exerciseCount = selectedTemplate.exercises;
+    
+    // Create generic exercises based on category
+    const exerciseTemplates = {
+      'HIIT': ['Burpees', 'Jump Squats', 'Mountain Climbers', 'High Knees', 'Jumping Jacks'],
+      'Strength': ['Push-ups', 'Squats', 'Pull-ups', 'Lunges', 'Planks'],
+      'Core': ['Crunches', 'Russian Twists', 'Leg Raises', 'Dead Bug', 'Side Planks'],
+      'Yoga': ['Downward Dog', 'Warrior Pose', 'Tree Pose', 'Child\'s Pose', 'Sun Salutation'],
+      'Full Body': ['Burpees', 'Push-ups', 'Squats', 'Lunges', 'Planks'],
+      'Athletic': ['Box Jumps', 'Battle Ropes', 'Kettlebell Swings', 'Sprints', 'Medicine Ball Slams']
+    };
+    
+    const categoryExercises = exerciseTemplates[selectedTemplate.category as keyof typeof exerciseTemplates] || exerciseTemplates['Full Body'];
+    
+    for (let i = 0; i < Math.min(exerciseCount, categoryExercises.length); i++) {
+      mockExercises.push({
+        id: `${selectedTemplate.id}-exercise-${i + 1}`,
+        name: categoryExercises[i],
+        defaultSets: 3,
+        defaultReps: selectedTemplate.difficulty === 'beginner' ? '8-10' : selectedTemplate.difficulty === 'intermediate' ? '10-15' : '15-20',
+        defaultRest: selectedTemplate.difficulty === 'beginner' ? '90s' : selectedTemplate.difficulty === 'intermediate' ? '60s' : '45s'
+      });
+    }
+    
+    return mockExercises;
   };
 
   return (
@@ -172,8 +192,8 @@ const WorkoutTemplates = () => {
         <WorkoutFinishConfirmation
           onConfirm={handleFinishConfirmed}
           onCancel={handleFinishCancelled}
-          completedExercises={selectedTemplate.exercises.length}
-          totalExercises={selectedTemplate.exercises.length}
+          completedExercises={selectedTemplate.exercises}
+          totalExercises={selectedTemplate.exercises}
           workoutDuration={getWorkoutDuration()}
         />
       )}
