@@ -25,8 +25,8 @@ const ExerciseAdjustment = ({ exercises, onSave, onCancel }: ExerciseAdjustmentP
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-4xl max-h-[80vh] overflow-y-auto bg-slate-800 border-slate-700">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <Card className="w-full max-w-4xl max-h-[80vh] overflow-y-auto bg-black/20 backdrop-blur-xl border-white/20 shadow-2xl">
         <AdjustmentHeader onResetToDefaults={resetToDefaults} />
         
         <CardContent className="space-y-6">
