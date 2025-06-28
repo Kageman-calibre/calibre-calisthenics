@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import AdjustmentHeader from './adjustment/AdjustmentHeader';
-import ExerciseAdjustmentCard, { ExerciseAdjustment } from './adjustment/ExerciseAdjustmentCard';
+import ExerciseAdjustmentCard, { type ExerciseAdjustment } from './adjustment/ExerciseAdjustmentCard';
 import AdjustmentActions from './adjustment/AdjustmentActions';
 import { useExerciseAdjustments } from './adjustment/useExerciseAdjustments';
 
