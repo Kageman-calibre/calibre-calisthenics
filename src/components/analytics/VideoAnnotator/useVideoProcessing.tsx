@@ -7,11 +7,16 @@ export const useVideoProcessing = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedVideoUrl, setProcessedVideoUrl] = useState<string | null>(null);
+  const [processingProgress, setProcessingProgress] = useState(0);
+  const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<number | null>(null);
 
   const processVideo = async (videoUrl: string, analysisResult: AnalysisResult) => {
     if (!videoRef.current || !canvasRef.current) return;
 
     setIsProcessing(true);
+    setProcessingProgress(0);
+    setEstimatedTimeRemaining(null);
+    
     const video = videoRef.current;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d')!;
@@ -24,6 +29,9 @@ export const useVideoProcessing = () => {
     const stream = canvas.captureStream(30); // 30 FPS
     const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
 
+    const startTime = Date.now();
+    let lastProgressUpdate = startTime;
+
     recorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         chunks.push(event.data);
@@ -35,6 +43,8 @@ export const useVideoProcessing = () => {
       const url = URL.createObjectURL(blob);
       setProcessedVideoUrl(url);
       setIsProcessing(false);
+      setProcessingProgress(100);
+      setEstimatedTimeRemaining(0);
     };
 
     // Start recording
@@ -45,6 +55,29 @@ export const useVideoProcessing = () => {
     let currentRep = 0;
     let lastKeyFrame = 0;
 
+    const updateProgress = () => {
+      if (video.duration && video.currentTime) {
+        const progress = (video.currentTime / video.duration) * 100;
+        setProcessingProgress(progress);
+
+        // Calculate time estimation
+        const now = Date.now();
+        const elapsed = now - startTime;
+        const processingRate = progress / elapsed; // progress per millisecond
+        
+        if (progress > 5 && processingRate > 0) { // Only estimate after 5% progress
+          const remainingProgress = 100 - progress;
+          const estimatedRemainingMs = remainingProgress / processingRate;
+          setEstimatedTimeRemaining(Math.ceil(estimatedRemainingMs / 1000)); // Convert to seconds
+        }
+
+        // Update every 500ms to avoid too frequent updates
+        if (now - lastProgressUpdate > 500) {
+          lastProgressUpdate = now;
+        }
+      }
+    };
+
     const drawFrame = () => {
       if (video.paused || video.ended) {
         recorder.stop();
@@ -52,6 +85,9 @@ export const useVideoProcessing = () => {
       }
 
       const currentTime = video.currentTime;
+      
+      // Update progress
+      updateProgress();
       
       // Draw video frame
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -153,11 +189,24 @@ export const useVideoProcessing = () => {
     }
   };
 
+  const formatTime = (seconds: number): string => {
+    if (seconds < 60) {
+      return `${seconds}s`;
+    } else {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes}m ${remainingSeconds}s`;
+    }
+  };
+
   return {
     videoRef,
     canvasRef,
     isProcessing,
     processedVideoUrl,
+    processingProgress,
+    estimatedTimeRemaining,
+    formatTime,
     processVideo
   };
 };

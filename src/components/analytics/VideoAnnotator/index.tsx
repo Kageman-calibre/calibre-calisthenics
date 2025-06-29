@@ -10,6 +10,9 @@ const VideoAnnotator = ({ videoUrl, analysisResult }: VideoAnnotatorProps) => {
     canvasRef,
     isProcessing,
     processedVideoUrl,
+    processingProgress,
+    estimatedTimeRemaining,
+    formatTime,
     processVideo
   } = useVideoProcessing();
 
@@ -43,6 +46,9 @@ const VideoAnnotator = ({ videoUrl, analysisResult }: VideoAnnotatorProps) => {
       <AnnotatorControls
         isProcessing={isProcessing}
         processedVideoUrl={processedVideoUrl}
+        processingProgress={processingProgress}
+        estimatedTimeRemaining={estimatedTimeRemaining}
+        formatTime={formatTime}
         onCreateAnnotatedVideo={handleCreateAnnotatedVideo}
         onDownloadVideo={handleDownloadVideo}
       />
