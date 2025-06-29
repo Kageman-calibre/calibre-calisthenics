@@ -15,7 +15,7 @@ export const useVideoRecorder = () => {
         const stream = canvas.captureStream(30);
         const recorder = new MediaRecorder(stream, { 
           mimeType,
-          videoBitsPerSecond: 1000000 // Fixed property name
+          videoBitsPerSecond: 1000000 // Corrected property name
         });
 
         recorder.ondataavailable = (event) => {
