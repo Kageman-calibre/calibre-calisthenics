@@ -5,6 +5,8 @@ import { Upload, Play, Pause, RotateCcw, TrendingUp, AlertTriangle, CheckCircle 
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import VideoAnnotator from './VideoAnnotator';
+import AdvancedMovementAnalysis from './AdvancedMovementAnalysis';
+import EnhancedFeedbackSystem from './EnhancedFeedbackSystem';
 
 interface AnalysisResult {
   exercise: string;
@@ -16,11 +18,80 @@ interface AnalysisResult {
   keyFrames: number[];
 }
 
+interface AdvancedAnalysisResult {
+  jointAngles: Array<{
+    joint: string;
+    angle: number;
+    idealRange: [number, number];
+    status: 'good' | 'warning' | 'poor';
+  }>;
+  movementSymmetry: {
+    leftSide: number;
+    rightSide: number;
+    asymmetryPercentage: number;
+    status: 'balanced' | 'slight' | 'significant';
+  };
+  rangeOfMotion: Array<{
+    exercise: string;
+    achieved: number;
+    optimal: number;
+    percentage: number;
+  }>;
+  movementVelocity: {
+    concentric: number;
+    eccentric: number;
+    optimal: boolean;
+  };
+  injuryRisk: {
+    level: 'low' | 'moderate' | 'high';
+    factors: string[];
+    score: number;
+  };
+}
+
+interface EnhancedFeedbackData {
+  realTimeFeedback: Array<{
+    timestamp: number;
+    message: string;
+    type: 'correction' | 'encouragement' | 'warning';
+    severity: 'low' | 'medium' | 'high';
+  }>;
+  progressiveRecommendation: {
+    currentLevel: string;
+    nextLevel: string;
+    requirements: string[];
+    estimatedTimeframe: string;
+    difficulty: number;
+  };
+  injuryRiskAlerts: Array<{
+    risk: string;
+    severity: 'low' | 'medium' | 'high';
+    prevention: string[];
+    immediateAction: string;
+  }>;
+  movementComparison: {
+    userScore: number;
+    idealScore: number;
+    deviations: Array<{
+      phase: string;
+      issue: string;
+      correction: string;
+    }>;
+  };
+  overallImprovement: {
+    score: number;
+    keyAreas: string[];
+    priority: string;
+  };
+}
+
 const VideoAnalytics = () => {
   const [uploadedVideo, setUploadedVideo] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [advancedAnalysis, setAdvancedAnalysis] = useState<AdvancedAnalysisResult | null>(null);
+  const [enhancedFeedback, setEnhancedFeedback] = useState<EnhancedFeedbackData | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -31,6 +102,8 @@ const VideoAnalytics = () => {
       const videoUrl = URL.createObjectURL(file);
       setUploadedVideo(videoUrl);
       setAnalysisResult(null);
+      setAdvancedAnalysis(null);
+      setEnhancedFeedback(null);
     }
   };
 
@@ -47,13 +120,15 @@ const VideoAnalytics = () => {
           clearInterval(progressInterval);
           return 100;
         }
-        return prev + 10;
+        return prev + 8;
       });
-    }, 300);
+    }, 400);
 
-    // Simulate analysis (in real implementation, this would call an AI service)
+    // Simulate comprehensive analysis (in real implementation, this would call an AI service)
     setTimeout(() => {
       setIsAnalyzing(false);
+      
+      // Basic analysis results
       setAnalysisResult({
         exercise: 'Dips',
         formScore: 78,
@@ -71,7 +146,100 @@ const VideoAnalytics = () => {
         ],
         keyFrames: [2.5, 5.1, 7.8, 10.2, 12.9]
       });
-    }, 3500);
+
+      // Advanced movement analysis
+      setAdvancedAnalysis({
+        jointAngles: [
+          { joint: 'Shoulder', angle: 165, idealRange: [160, 180], status: 'good' },
+          { joint: 'Elbow', angle: 140, idealRange: [90, 160], status: 'good' },
+          { joint: 'Hip', angle: 175, idealRange: [170, 180], status: 'warning' },
+          { joint: 'Knee', angle: 178, idealRange: [175, 180], status: 'good' }
+        ],
+        movementSymmetry: {
+          leftSide: 85,
+          rightSide: 92,
+          asymmetryPercentage: 8.2,
+          status: 'slight'
+        },
+        rangeOfMotion: [
+          { exercise: 'Dip Descent', achieved: 145, optimal: 160, percentage: 91 },
+          { exercise: 'Full Extension', achieved: 175, optimal: 180, percentage: 97 }
+        ],
+        movementVelocity: {
+          concentric: 1.8,
+          eccentric: 2.2,
+          optimal: true
+        },
+        injuryRisk: {
+          level: 'low',
+          factors: ['Slight forward lean', 'Minor asymmetry detected'],
+          score: 25
+        }
+      });
+
+      // Enhanced feedback system
+      setEnhancedFeedback({
+        realTimeFeedback: [
+          { timestamp: 3.2, message: 'Maintain upright torso position', type: 'correction', severity: 'medium' },
+          { timestamp: 6.8, message: 'Excellent depth achieved!', type: 'encouragement', severity: 'low' },
+          { timestamp: 9.1, message: 'Control the descent more slowly', type: 'correction', severity: 'low' },
+          { timestamp: 11.5, message: 'Good lockout at the top', type: 'encouragement', severity: 'low' },
+          { timestamp: 14.2, message: 'Watch for forward lean', type: 'warning', severity: 'medium' }
+        ],
+        progressiveRecommendation: {
+          currentLevel: 'Intermediate Dips',
+          nextLevel: 'Weighted Dips (5kg)',
+          requirements: [
+            'Achieve 15 perfect form reps',
+            'Eliminate forward lean completely',
+            'Maintain 2-second controlled descent'
+          ],
+          estimatedTimeframe: '2-3 weeks',
+          difficulty: 72
+        },
+        injuryRiskAlerts: [
+          {
+            risk: 'Shoulder Impingement Risk',
+            severity: 'low',
+            prevention: [
+              'Warm up shoulders thoroughly',
+              'Focus on scapular stability',
+              'Avoid excessive forward lean'
+            ],
+            immediateAction: 'Reduce range of motion if shoulder pain occurs'
+          }
+        ],
+        movementComparison: {
+          userScore: 78,
+          idealScore: 95,
+          deviations: [
+            {
+              phase: 'Descent Phase',
+              issue: 'Slight forward lean detected',
+              correction: 'Engage core and maintain vertical torso'
+            },
+            {
+              phase: 'Bottom Position',
+              issue: 'Inconsistent depth across reps',
+              correction: 'Aim for shoulders level with elbows'
+            }
+          ]
+        },
+        overallImprovement: {
+          score: 82,
+          keyAreas: ['Torso Position', 'Movement Consistency', 'Tempo Control'],
+          priority: 'Eliminate forward lean'
+        }
+      });
+    }, 5000);
+  };
+
+  const handlePlayback = (timestamp: number) => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = timestamp;
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
   };
 
   const togglePlayPause = () => {
@@ -110,17 +278,17 @@ const VideoAnalytics = () => {
       <div className="text-center">
         <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20 rounded-full px-4 py-2 mb-6">
           <TrendingUp className="h-4 w-4 text-green-400" />
-          <span className="text-green-400 text-sm font-medium">Video Analytics</span>
+          <span className="text-green-400 text-sm font-medium">Advanced Video Analytics</span>
         </div>
         
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
-          Movement
+          Comprehensive
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
-            Analysis
+            Movement Analysis
           </span>
         </h1>
         <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-          Upload your workout videos to get AI-powered form analysis and personalized feedback
+          AI-powered comprehensive analysis with advanced movement tracking, injury risk assessment, and personalized feedback
         </p>
       </div>
 
@@ -152,7 +320,7 @@ const VideoAnalytics = () => {
         </Card>
       )}
 
-      {/* Video Player and Analysis */}
+      {/* Video Player and Basic Analysis */}
       {uploadedVideo && (
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Video Player */}
@@ -181,23 +349,23 @@ const VideoAnalytics = () => {
                     disabled={isAnalyzing}
                     className="bg-green-500 hover:bg-green-600"
                   >
-                    {isAnalyzing ? 'Analyzing...' : 'Analyze Form'}
+                    {isAnalyzing ? 'Analyzing...' : 'Comprehensive Analysis'}
                   </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Analysis Results */}
+          {/* Basic Analysis Results */}
           <Card className="bg-slate-800/50 border-slate-700">
             <CardHeader>
-              <CardTitle className="text-white">Analysis Results</CardTitle>
+              <CardTitle className="text-white">Quick Analysis</CardTitle>
             </CardHeader>
             <CardContent>
               {isAnalyzing && (
                 <div className="space-y-4">
                   <div className="text-center">
-                    <div className="text-sm text-gray-400 mb-2">Analyzing movement patterns...</div>
+                    <div className="text-sm text-gray-400 mb-2">Performing comprehensive analysis...</div>
                     <Progress value={analysisProgress} className="w-full" />
                     <div className="text-xs text-gray-500 mt-1">{analysisProgress}% complete</div>
                   </div>
@@ -228,32 +396,16 @@ const VideoAnalytics = () => {
                     </div>
                   </div>
 
-                  {/* Feedback */}
+                  {/* Quick Feedback */}
                   <div>
                     <h4 className="text-md font-medium text-white mb-3 flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-400" />
-                      What You Did Well
+                      Quick Feedback
                     </h4>
                     <ul className="space-y-2">
-                      {analysisResult.feedback.map((item, index) => (
+                      {analysisResult.feedback.slice(0, 2).map((item, index) => (
                         <li key={index} className="text-gray-300 text-sm flex items-start gap-2">
                           <span className="text-green-400 mt-1">•</span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Suggestions */}
-                  <div>
-                    <h4 className="text-md font-medium text-white mb-3 flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-orange-400" />
-                      Areas for Improvement
-                    </h4>
-                    <ul className="space-y-2">
-                      {analysisResult.suggestions.map((item, index) => (
-                        <li key={index} className="text-gray-300 text-sm flex items-start gap-2">
-                          <span className="text-orange-400 mt-1">•</span>
                           {item}
                         </li>
                       ))}
@@ -264,7 +416,6 @@ const VideoAnalytics = () => {
                   <div>
                     <div className="text-sm text-gray-400">Tempo</div>
                     <div className="text-lg font-medium text-white">{analysisResult.tempo}</div>
-                    <div className="text-xs text-gray-500">Down-Pause-Up-Pause (seconds)</div>
                   </div>
                 </div>
               )}
@@ -272,12 +423,24 @@ const VideoAnalytics = () => {
               {!isAnalyzing && !analysisResult && (
                 <div className="text-center py-8">
                   <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-400">Click "Analyze Form" to get detailed feedback on your technique</p>
+                  <p className="text-gray-400">Click "Comprehensive Analysis" to get detailed feedback</p>
                 </div>
               )}
             </CardContent>
           </Card>
         </div>
+      )}
+
+      {/* Advanced Analysis Sections */}
+      {advancedAnalysis && (
+        <AdvancedMovementAnalysis analysisResult={advancedAnalysis} />
+      )}
+
+      {enhancedFeedback && (
+        <EnhancedFeedbackSystem 
+          feedbackData={enhancedFeedback} 
+          onPlayback={handlePlayback}
+        />
       )}
 
       {/* Video Annotation Section */}
@@ -288,8 +451,8 @@ const VideoAnalytics = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-300 mb-4">
-              Create an annotated version of your video with analysis overlays including form scores, 
-              rep counts, feedback, and visual indicators.
+              Create an annotated version of your video with comprehensive analysis overlays including form scores, 
+              movement analysis, real-time feedback, and visual indicators.
             </p>
             <VideoAnnotator videoUrl={uploadedVideo} analysisResult={analysisResult} />
           </CardContent>
@@ -303,6 +466,8 @@ const VideoAnalytics = () => {
             onClick={() => {
               setUploadedVideo(null);
               setAnalysisResult(null);
+              setAdvancedAnalysis(null);
+              setEnhancedFeedback(null);
               setIsAnalyzing(false);
               setAnalysisProgress(0);
             }}
