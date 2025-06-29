@@ -30,57 +30,82 @@ export const useVideoProcessing = () => {
     setEstimatedTimeRemaining(null);
 
     try {
-      // Ensure video is loaded
-      if (video.readyState < 2) {
-        await new Promise<void>((resolve, reject) => {
-          const timeout = setTimeout(() => {
-            reject(new Error('Video loading timeout'));
-          }, 10000);
+      // Set video source and wait for it to load
+      video.src = videoUrl;
+      video.crossOrigin = 'anonymous';
+      video.muted = true;
+      video.preload = 'metadata';
 
-          const onLoadedData = () => {
-            clearTimeout(timeout);
-            video.removeEventListener('loadeddata', onLoadedData);
-            resolve();
-          };
+      console.log('Loading video...');
+      
+      // Wait for video metadata to load with proper error handling
+      await new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Video metadata loading timeout'));
+        }, 15000);
 
-          video.addEventListener('loadeddata', onLoadedData);
-          video.load();
-        });
-      }
+        const onLoadedMetadata = () => {
+          console.log('Video metadata loaded successfully');
+          clearTimeout(timeout);
+          video.removeEventListener('loadedmetadata', onLoadedMetadata);
+          video.removeEventListener('error', onError);
+          resolve();
+        };
 
-      // Set canvas dimensions to match video
-      canvas.width = video.videoWidth || 640;
-      canvas.height = video.videoHeight || 360;
+        const onError = (e: Event) => {
+          console.error('Video loading error:', e);
+          clearTimeout(timeout);
+          video.removeEventListener('loadedmetadata', onLoadedMetadata);
+          video.removeEventListener('error', onError);
+          reject(new Error('Failed to load video'));
+        };
 
-      console.log('Video dimensions:', canvas.width, 'x', canvas.height);
+        video.addEventListener('loadedmetadata', onLoadedMetadata);
+        video.addEventListener('error', onError);
+      });
+
+      // Set canvas dimensions based on video
+      const videoWidth = video.videoWidth || 640;
+      const videoHeight = video.videoHeight || 480;
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
+
+      console.log('Video dimensions:', videoWidth, 'x', videoHeight);
       console.log('Video duration:', video.duration);
+
+      // Check MediaRecorder support
+      const supportedTypes = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+      let mimeType = 'video/webm';
+      
+      for (const type of supportedTypes) {
+        if (MediaRecorder.isTypeSupported(type)) {
+          mimeType = type;
+          console.log('Using MIME type:', mimeType);
+          break;
+        }
+      }
 
       const chunks: Blob[] = [];
       const stream = canvas.captureStream(30);
-      
-      // Check if MediaRecorder is supported
-      if (!MediaRecorder.isTypeSupported('video/webm')) {
-        throw new Error('WebM recording not supported');
-      }
-
       const recorder = new MediaRecorder(stream, { 
-        mimeType: 'video/webm',
-        videoBitsPerSecond: 2500000 // 2.5 Mbps
+        mimeType,
+        videoBitsPerRate: 1000000 // 1 Mbps
       });
 
       const startTime = Date.now();
       let animationId: number;
       let currentRep = 0;
-      let lastKeyFrame = 0;
 
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           chunks.push(event.data);
+          console.log('Recorded chunk:', event.data.size, 'bytes');
         }
       };
 
       recorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'video/webm' });
+        console.log('Recording stopped, creating blob...');
+        const blob = new Blob(chunks, { type: mimeType });
         const url = URL.createObjectURL(blob);
         setProcessedVideoUrl(url);
         setIsProcessing(false);
@@ -92,19 +117,20 @@ export const useVideoProcessing = () => {
       recorder.onerror = (event) => {
         console.error('MediaRecorder error:', event);
         setIsProcessing(false);
+        setProcessingProgress(0);
       };
 
       const updateProgress = () => {
-        if (video.duration && video.currentTime) {
-          const progress = (video.currentTime / video.duration) * 100;
-          setProcessingProgress(Math.min(progress, 99)); // Cap at 99% until complete
+        if (video.duration && video.currentTime >= 0) {
+          const progress = Math.min((video.currentTime / video.duration) * 100, 99);
+          setProcessingProgress(progress);
 
           // Calculate time estimation
           const now = Date.now();
           const elapsed = now - startTime;
-          const processingRate = progress / elapsed; // progress per millisecond
+          const processingRate = progress / elapsed;
           
-          if (progress > 5 && processingRate > 0) {
+          if (progress > 1 && processingRate > 0) {
             const remainingProgress = 100 - progress;
             const estimatedRemainingMs = remainingProgress / processingRate;
             setEstimatedTimeRemaining(Math.ceil(estimatedRemainingMs / 1000));
@@ -113,7 +139,8 @@ export const useVideoProcessing = () => {
       };
 
       const drawFrame = () => {
-        if (video.paused || video.ended || !isProcessing) {
+        if (!isProcessing || video.ended) {
+          console.log('Stopping animation - processing:', isProcessing, 'ended:', video.ended);
           cancelAnimationFrame(animationId);
           recorder.stop();
           return;
@@ -124,16 +151,21 @@ export const useVideoProcessing = () => {
         
         // Clear canvas and draw video frame
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        try {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        } catch (error) {
+          console.warn('Failed to draw video frame:', error);
+        }
 
         // Draw overlay background
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(20, 20, 300, 120);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(20, 20, 320, 140);
 
         // Draw form score
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 24px Arial';
-        ctx.fillText(`Form Score: ${analysisResult.formScore}/100`, 30, 50);
+        ctx.font = 'bold 28px Arial';
+        ctx.fillText(`Form Score: ${analysisResult.formScore}/100`, 30, 55);
 
         // Update rep count based on current time
         const newRep = analysisResult.keyFrames.filter(frame => frame <= currentTime).length;
@@ -143,28 +175,28 @@ export const useVideoProcessing = () => {
 
         // Draw rep counter
         ctx.fillStyle = '#4ade80';
-        ctx.font = 'bold 20px Arial';
-        ctx.fillText(`Reps: ${currentRep}/${analysisResult.repCount}`, 30, 80);
+        ctx.font = 'bold 24px Arial';
+        ctx.fillText(`Reps: ${currentRep}/${analysisResult.repCount}`, 30, 90);
 
         // Draw exercise name
         ctx.fillStyle = '#60a5fa';
-        ctx.font = '18px Arial';
-        ctx.fillText(analysisResult.exercise, 30, 105);
+        ctx.font = '20px Arial';
+        ctx.fillText(analysisResult.exercise, 30, 120);
 
         // Draw tempo
         ctx.fillStyle = '#fbbf24';
-        ctx.font = '16px Arial';
-        ctx.fillText(`Tempo: ${analysisResult.tempo}`, 30, 125);
+        ctx.font = '18px Arial';
+        ctx.fillText(`Tempo: ${analysisResult.tempo}`, 30, 145);
 
         // Show feedback at intervals
-        if (currentTime > 2) {
-          const feedbackIndex = Math.floor((currentTime - 2) / 3) % analysisResult.feedback.length;
+        if (currentTime > 1 && analysisResult.feedback.length > 0) {
+          const feedbackIndex = Math.floor(currentTime / 4) % analysisResult.feedback.length;
           const feedback = analysisResult.feedback[feedbackIndex];
           
           if (feedback) {
             // Feedback background
             ctx.fillStyle = 'rgba(34, 197, 94, 0.9)';
-            ctx.fillRect(canvas.width - 350, 20, 330, 80);
+            ctx.fillRect(canvas.width - 380, 20, 360, 100);
             
             // Feedback text with word wrapping
             ctx.fillStyle = '#ffffff';
@@ -177,31 +209,31 @@ export const useVideoProcessing = () => {
               const testLine = line + words[n] + ' ';
               const metrics = ctx.measureText(testLine);
               
-              if (metrics.width > 310 && n > 0) {
-                ctx.fillText(line.trim(), canvas.width - 340, y);
+              if (metrics.width > 340 && n > 0) {
+                ctx.fillText(line.trim(), canvas.width - 370, y);
                 line = words[n] + ' ';
-                y += 20;
-                if (y > 85) break; // Prevent overflow
+                y += 22;
+                if (y > 105) break;
               } else {
                 line = testLine;
               }
             }
-            if (line.trim() && y <= 85) {
-              ctx.fillText(line.trim(), canvas.width - 340, y);
+            if (line.trim() && y <= 105) {
+              ctx.fillText(line.trim(), canvas.width - 370, y);
             }
           }
         }
 
         // Draw rep markers at key frames
         analysisResult.keyFrames.forEach((frame, index) => {
-          if (Math.abs(frame - currentTime) < 0.3) {
+          if (Math.abs(frame - currentTime) < 0.5) {
             ctx.fillStyle = '#ef4444';
-            ctx.fillRect(canvas.width / 2 - 50, canvas.height - 60, 100, 30);
+            ctx.fillRect(canvas.width / 2 - 60, canvas.height - 70, 120, 40);
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 16px Arial';
+            ctx.font = 'bold 18px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText(`Rep ${index + 1}`, canvas.width / 2, canvas.height - 40);
-            ctx.textAlign = 'left'; // Reset alignment
+            ctx.fillText(`Rep ${index + 1}`, canvas.width / 2, canvas.height - 45);
+            ctx.textAlign = 'left';
           }
         });
 
@@ -209,9 +241,10 @@ export const useVideoProcessing = () => {
       };
 
       // Start recording
-      recorder.start(100); // Collect data every 100ms
+      console.log('Starting recording...');
+      recorder.start(200); // Collect data every 200ms
       
-      // Reset and start video
+      // Reset video to beginning
       video.currentTime = 0;
       
       // Wait for seek to complete
@@ -224,6 +257,7 @@ export const useVideoProcessing = () => {
       });
 
       // Start playback and drawing
+      console.log('Starting video playback...');
       await video.play();
       drawFrame();
 
@@ -231,7 +265,7 @@ export const useVideoProcessing = () => {
       console.error('Video processing error:', error);
       setIsProcessing(false);
       setProcessingProgress(0);
-      // You might want to show a toast notification here
+      setEstimatedTimeRemaining(null);
     }
   };
 
