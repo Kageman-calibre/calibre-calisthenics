@@ -1,10 +1,31 @@
 
 import { Play, ArrowRight, Star, Users, Award } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./auth/AuthProvider";
 
 const Hero = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleStartJourney = () => {
+    if (user) {
+      // If user is logged in, take them to beginner programs
+      navigate('/beginner-programs');
+    } else {
+      // If not logged in, take them to auth page
+      navigate('/auth');
+    }
+  };
+
+  const handleExplorePrograms = () => {
+    if (user) {
+      // If user is logged in, take them to programs page
+      navigate('/programs');
+    } else {
+      // If not logged in, take them to auth page first
+      navigate('/auth');
+    }
+  };
 
   return (
     <section className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -33,40 +54,27 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in">
-            {user ? (
-              <>
-                <button className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3">
-                  <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
-                  <span className="text-lg">Start Your Journey</span>
-                </button>
-                
-                <Link
-                  to="/programs"
-                  className="group border-2 border-gold hover:border-white text-gold hover:text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3"
-                >
-                  <span className="text-lg">Explore Programs</span>
-                  <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </>
-            ) : (
-              <>
-                <button className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3">
-                  <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
-                  <span className="text-lg">Start Your Journey</span>
-                </button>
-                
-                <button className="group border-2 border-gold hover:border-white text-gold hover:text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3">
-                  <span className="text-lg">Explore Programs</span>
-                  <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </>
-            )}
+            <button 
+              onClick={handleStartJourney}
+              className="group gradient-gold-burgundy hover:opacity-90 text-black font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-gold/25 flex items-center space-x-3"
+            >
+              <Play className="h-6 w-6 group-hover:scale-110 transition-transform" />
+              <span className="text-lg">Start Your Journey</span>
+            </button>
+            
+            <button
+              onClick={handleExplorePrograms}
+              className="group border-2 border-gold hover:border-white text-gold hover:text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3"
+            >
+              <span className="text-lg">Explore Programs</span>
+              <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
         
         {/* Features Grid - honest information */}
         <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center group">
+          <Link to="/beginner-programs" className="text-center group cursor-pointer">
             <div className="bg-black/40 backdrop-blur-lg rounded-2xl p-8 border border-gold/20 hover:border-gold/40 transition-all duration-500 hover:transform hover:scale-105">
               <div className="inline-flex items-center justify-center w-16 h-16 gradient-gold-burgundy rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                 <Users className="h-8 w-8 text-black" />
@@ -74,9 +82,9 @@ const Hero = () => {
               <div className="text-4xl font-bold text-white mb-2">Growing</div>
               <div className="text-white/80 text-lg">Community</div>
             </div>
-          </div>
+          </Link>
           
-          <div className="text-center group">
+          <Link to="/programs" className="text-center group cursor-pointer">
             <div className="bg-black/40 backdrop-blur-lg rounded-2xl p-8 border border-gold/20 hover:border-gold/40 transition-all duration-500 hover:transform hover:scale-105">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-burgundy rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                 <Award className="h-8 w-8 text-white" />
@@ -84,9 +92,9 @@ const Hero = () => {
               <div className="text-4xl font-bold text-white mb-2">Expert</div>
               <div className="text-white/80 text-lg">Programs</div>
             </div>
-          </div>
+          </Link>
           
-          <div className="text-center group">
+          <Link to="/skill-guides" className="text-center group cursor-pointer">
             <div className="bg-black/40 backdrop-blur-lg rounded-2xl p-8 border border-gold/20 hover:border-gold/40 transition-all duration-500 hover:transform hover:scale-105">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gold rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                 <Star className="h-8 w-8 text-black" />
@@ -94,7 +102,7 @@ const Hero = () => {
               <div className="text-4xl font-bold text-white mb-2">Quality</div>
               <div className="text-white/80 text-lg">Training</div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </section>
