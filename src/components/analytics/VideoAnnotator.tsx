@@ -1,3 +1,3 @@
 
-// Re-export the main component for backward compatibility
-export { default } from './VideoAnnotator';
+// Main VideoAnnotator component - cleaned up to remove circular dependency
+export { default } from './VideoAnnotator/index';
