@@ -1,63 +1,81 @@
 
-export const getVideoSupport = () => {
-  const supportedTypes = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
-  let mimeType = 'video/webm';
-  
-  for (const type of supportedTypes) {
-    if (MediaRecorder.isTypeSupported(type)) {
-      mimeType = type;
-      console.log('Using MIME type:', mimeType);
-      break;
-    }
-  }
-  
-  return { mimeType };
-};
-
-export const formatTime = (seconds: number): string => {
-  if (seconds < 60) {
-    return `${seconds}s`;
-  } else {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}m ${remainingSeconds}s`;
-  }
-};
-
 export const loadVideoMetadata = (video: HTMLVideoElement): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      reject(new Error('Video metadata loading timeout'));
-    }, 15000);
+  return new Promise((resolve, reject) => {
+    if (video.readyState >= 1) {
+      resolve();
+      return;
+    }
 
-    const onLoadedMetadata = () => {
-      console.log('Video metadata loaded successfully');
-      clearTimeout(timeout);
-      video.removeEventListener('loadedmetadata', onLoadedMetadata);
-      video.removeEventListener('error', onError);
+    const handleLoadedMetadata = () => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('error', handleError);
       resolve();
     };
 
-    const onError = (e: Event) => {
-      console.error('Video loading error:', e);
-      clearTimeout(timeout);
-      video.removeEventListener('loadedmetadata', onLoadedMetadata);
-      video.removeEventListener('error', onError);
-      reject(new Error('Failed to load video'));
+    const handleError = (error: Event) => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('error', handleError);
+      reject(new Error('Failed to load video metadata'));
     };
 
-    video.addEventListener('loadedmetadata', onLoadedMetadata);
-    video.addEventListener('error', onError);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('error', handleError);
   });
 };
 
 export const seekToBeginning = (video: HTMLVideoElement): Promise<void> => {
-  return new Promise<void>((resolve) => {
-    const onSeeked = () => {
-      video.removeEventListener('seeked', onSeeked);
+  return new Promise((resolve) => {
+    if (video.currentTime === 0) {
+      resolve();
+      return;
+    }
+
+    const handleSeeked = () => {
+      video.removeEventListener('seeked', handleSeeked);
       resolve();
     };
-    video.addEventListener('seeked', onSeeked);
+
+    video.addEventListener('seeked', handleSeeked);
     video.currentTime = 0;
   });
+};
+
+export const formatTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+export const getVideoSupport = () => {
+  const canvas = document.createElement('canvas');
+  const canCaptureStream = 'captureStream' in canvas;
+  
+  if (!canCaptureStream) {
+    throw new Error('Canvas capture stream not supported');
+  }
+
+  // Check for MediaRecorder support and preferred mime types
+  const mimeTypes = [
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
+    'video/webm',
+    'video/mp4'
+  ];
+
+  let supportedMimeType = '';
+  for (const mimeType of mimeTypes) {
+    if (MediaRecorder.isTypeSupported(mimeType)) {
+      supportedMimeType = mimeType;
+      break;
+    }
+  }
+
+  if (!supportedMimeType) {
+    supportedMimeType = 'video/webm'; // fallback
+  }
+
+  return {
+    canCaptureStream,
+    mimeType: supportedMimeType
+  };
 };

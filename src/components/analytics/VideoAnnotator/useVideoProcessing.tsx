@@ -31,16 +31,44 @@ export const useVideoProcessing = () => {
     resetRecorder();
 
     try {
-      // Set video source and load metadata
+      // Set video source - don't set crossOrigin for blob URLs
       video.src = videoUrl;
-      video.crossOrigin = 'anonymous';
+      if (!videoUrl.startsWith('blob:')) {
+        video.crossOrigin = 'anonymous';
+      }
       video.muted = true;
       video.preload = 'metadata';
 
-      console.log('Loading video...');
-      await loadVideoMetadata(video);
+      console.log('Loading video...', videoUrl);
+      
+      // Improved video loading with better error handling
+      await new Promise<void>((resolve, reject) => {
+        const handleLoadedData = () => {
+          console.log('Video loaded successfully');
+          video.removeEventListener('loadeddata', handleLoadedData);
+          video.removeEventListener('error', handleError);
+          resolve();
+        };
 
-      // Set canvas dimensions
+        const handleError = (error: Event) => {
+          console.error('Video loading error:', error);
+          video.removeEventListener('loadeddata', handleLoadedData);
+          video.removeEventListener('error', handleError);
+          reject(new Error('Failed to load video'));
+        };
+
+        video.addEventListener('loadeddata', handleLoadedData);
+        video.addEventListener('error', handleError);
+
+        // Force load if not already loading
+        if (video.readyState < 2) {
+          video.load();
+        } else {
+          handleLoadedData();
+        }
+      });
+
+      // Set canvas dimensions based on video
       const videoWidth = video.videoWidth || 640;
       const videoHeight = video.videoHeight || 480;
       canvas.width = videoWidth;
@@ -57,21 +85,29 @@ export const useVideoProcessing = () => {
       );
 
       let animationId: number;
+      let isComplete = false;
 
       const drawFrame = () => {
-        if (!isProcessing || video.ended) {
-          console.log('Stopping animation - processing:', isProcessing, 'ended:', video.ended);
+        if (!isProcessing || video.ended || isComplete) {
+          console.log('Stopping animation - processing:', isProcessing, 'ended:', video.ended, 'complete:', isComplete);
           cancelAnimationFrame(animationId);
-          stopRecording();
           
-          // Set the processed video URL
-          const recordedUrl = getRecordedUrl();
-          if (recordedUrl) {
-            setProcessedVideoUrl(recordedUrl);
-            setProcessingProgress(100);
-            setEstimatedTimeRemaining(0);
+          if (!isComplete) {
+            isComplete = true;
+            stopRecording();
+            
+            // Set the processed video URL
+            setTimeout(() => {
+              const recordedUrl = getRecordedUrl();
+              if (recordedUrl) {
+                setProcessedVideoUrl(recordedUrl);
+                setProcessingProgress(100);
+                setEstimatedTimeRemaining(0);
+                console.log('Video processing complete, URL:', recordedUrl);
+              }
+              setIsProcessing(false);
+            }, 100);
           }
-          setIsProcessing(false);
           return;
         }
 
@@ -79,7 +115,7 @@ export const useVideoProcessing = () => {
         
         const shouldContinue = renderer.drawFrame();
         if (!shouldContinue) {
-          setIsProcessing(false);
+          isComplete = true;
           return;
         }
 
@@ -87,12 +123,19 @@ export const useVideoProcessing = () => {
       };
 
       // Start recording
+      console.log('Starting canvas recording...');
       await startRecording(canvas);
       
       // Reset video and start playback
       await seekToBeginning(video);
       console.log('Starting video playback...');
-      await video.play();
+      
+      // Ensure video plays
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+      }
+      
       drawFrame();
 
     } catch (error) {
