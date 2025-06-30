@@ -31,51 +31,71 @@ export const useVideoProcessing = () => {
     resetRecorder();
 
     try {
-      // Set video source - don't set crossOrigin for blob URLs
+      console.log('Starting video processing for:', videoUrl);
+      
+      // Reset video state
+      video.currentTime = 0;
+      video.muted = true;
+      video.preload = 'metadata';
+      
+      // Set video source
       video.src = videoUrl;
       if (!videoUrl.startsWith('blob:')) {
         video.crossOrigin = 'anonymous';
       }
-      video.muted = true;
-      video.preload = 'metadata';
 
-      console.log('Loading video...', videoUrl);
-      
-      // Improved video loading with better error handling
+      // Wait for video to be ready
+      console.log('Loading video metadata...');
       await new Promise<void>((resolve, reject) => {
-        const handleLoadedData = () => {
-          console.log('Video loaded successfully');
-          video.removeEventListener('loadeddata', handleLoadedData);
-          video.removeEventListener('error', handleError);
-          resolve();
+        const timeout = setTimeout(() => {
+          cleanup();
+          reject(new Error('Video loading timeout'));
+        }, 10000);
+
+        const cleanup = () => {
+          clearTimeout(timeout);
+          video.removeEventListener('loadedmetadata', onLoaded);
+          video.removeEventListener('canplay', onLoaded);
+          video.removeEventListener('error', onError);
         };
 
-        const handleError = (error: Event) => {
-          console.error('Video loading error:', error);
-          video.removeEventListener('loadeddata', handleLoadedData);
-          video.removeEventListener('error', handleError);
+        const onLoaded = () => {
+          if (video.readyState >= 2) {
+            cleanup();
+            resolve();
+          }
+        };
+
+        const onError = (error: Event) => {
+          cleanup();
           reject(new Error('Failed to load video'));
         };
 
-        video.addEventListener('loadeddata', handleLoadedData);
-        video.addEventListener('error', handleError);
+        video.addEventListener('loadedmetadata', onLoaded);
+        video.addEventListener('canplay', onLoaded);
+        video.addEventListener('error', onError);
 
-        // Force load if not already loading
-        if (video.readyState < 2) {
-          video.load();
+        if (video.readyState >= 2) {
+          onLoaded();
         } else {
-          handleLoadedData();
+          video.load();
         }
       });
 
-      // Set canvas dimensions based on video
+      console.log('Video loaded successfully');
+      console.log('Video dimensions:', video.videoWidth, 'x', video.videoHeight);
+      console.log('Video duration:', video.duration, 'seconds');
+
+      // Validate video properties
+      if (!video.duration || video.duration <= 0) {
+        throw new Error('Invalid video duration');
+      }
+
+      // Set canvas dimensions
       const videoWidth = video.videoWidth || 640;
       const videoHeight = video.videoHeight || 480;
       canvas.width = videoWidth;
       canvas.height = videoHeight;
-
-      console.log('Video dimensions:', videoWidth, 'x', videoHeight);
-      console.log('Video duration:', video.duration);
 
       // Initialize utilities
       const renderer = new CanvasRenderer(canvas, video, analysisResult);
@@ -84,65 +104,99 @@ export const useVideoProcessing = () => {
         setEstimatedTimeRemaining
       );
 
+      // Start recording first
+      console.log('Starting canvas recording...');
+      await startRecording(canvas);
+      console.log('Recording started successfully');
+
+      // Reset video to beginning
+      await seekToBeginning(video);
+
+      // Start video playback
+      console.log('Starting video playback...');
+      const playPromise = video.play();
+      if (playPromise) {
+        await playPromise;
+      }
+
+      // Animation loop
       let animationId: number;
       let isComplete = false;
 
-      const drawFrame = () => {
-        if (!isProcessing || video.ended || isComplete) {
-          console.log('Stopping animation - processing:', isProcessing, 'ended:', video.ended, 'complete:', isComplete);
-          cancelAnimationFrame(animationId);
-          
-          if (!isComplete) {
-            isComplete = true;
-            stopRecording();
-            
-            // Set the processed video URL
-            setTimeout(() => {
-              const recordedUrl = getRecordedUrl();
-              if (recordedUrl) {
-                setProcessedVideoUrl(recordedUrl);
-                setProcessingProgress(100);
-                setEstimatedTimeRemaining(0);
-                console.log('Video processing complete, URL:', recordedUrl);
-              }
-              setIsProcessing(false);
-            }, 100);
-          }
+      const processFrame = () => {
+        if (isComplete || !isProcessing) {
           return;
         }
 
+        // Check if video has ended
+        if (video.ended || video.currentTime >= video.duration) {
+          console.log('Video playback complete');
+          isComplete = true;
+          
+          // Stop recording and finalize
+          setTimeout(async () => {
+            stopRecording();
+            
+            // Wait a bit for recording to finalize
+            setTimeout(() => {
+              const recordedUrl = getRecordedUrl();
+              if (recordedUrl) {
+                console.log('Processed video URL ready:', recordedUrl);
+                setProcessedVideoUrl(recordedUrl);
+                setProcessingProgress(100);
+                setEstimatedTimeRemaining(0);
+              } else {
+                console.error('Failed to get recorded URL');
+              }
+              setIsProcessing(false);
+            }, 500);
+          }, 100);
+          return;
+        }
+
+        // Update progress
         progressTracker.updateProgress(video);
         
+        // Draw frame
         const shouldContinue = renderer.drawFrame();
         if (!shouldContinue) {
           isComplete = true;
           return;
         }
 
-        animationId = requestAnimationFrame(drawFrame);
+        // Continue animation
+        animationId = requestAnimationFrame(processFrame);
       };
 
-      // Start recording
-      console.log('Starting canvas recording...');
-      await startRecording(canvas);
-      
-      // Reset video and start playback
-      await seekToBeginning(video);
-      console.log('Starting video playback...');
-      
-      // Ensure video plays
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        await playPromise;
-      }
-      
-      drawFrame();
+      // Start the animation loop
+      animationId = requestAnimationFrame(processFrame);
+
+      // Cleanup function
+      const cleanup = () => {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        video.pause();
+        video.currentTime = 0;
+      };
+
+      // Handle video end event
+      video.addEventListener('ended', () => {
+        console.log('Video ended event fired');
+        isComplete = true;
+      });
 
     } catch (error) {
       console.error('Video processing error:', error);
       setIsProcessing(false);
       setProcessingProgress(0);
       setEstimatedTimeRemaining(null);
+      
+      // Clean up on error
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
     }
   };
 

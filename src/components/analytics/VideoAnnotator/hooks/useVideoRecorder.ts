@@ -6,65 +6,124 @@ export const useVideoRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   const startRecording = (canvas: HTMLCanvasElement): Promise<void> => {
     return new Promise((resolve, reject) => {
       try {
+        console.log('Initializing MediaRecorder...');
+        
+        // Reset chunks
+        chunksRef.current = [];
+        
         const { mimeType } = getVideoSupport();
-        const chunks: Blob[] = [];
+        console.log('Using MIME type:', mimeType);
+        
         const stream = canvas.captureStream(30);
-        const recorder = new MediaRecorder(stream, { 
+        console.log('Canvas stream created:', stream);
+        
+        // Check if stream has video tracks
+        if (!stream.getVideoTracks().length) {
+          throw new Error('No video tracks in canvas stream');
+        }
+
+        const options: MediaRecorderOptions = {
           mimeType,
-          videoBitsPerSecond: 1000000 // Corrected property name
-        });
+          videoBitsPerSecond: 1000000
+        };
+
+        // Check if the MIME type is supported
+        if (!MediaRecorder.isTypeSupported(mimeType)) {
+          console.warn('MIME type not supported, using default');
+          delete options.mimeType;
+        }
+
+        const recorder = new MediaRecorder(stream, options);
+        console.log('MediaRecorder created with state:', recorder.state);
 
         recorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            chunks.push(event.data);
-            console.log('Recorded chunk:', event.data.size, 'bytes');
+          console.log('Data available:', event.data.size, 'bytes');
+          if (event.data && event.data.size > 0) {
+            chunksRef.current.push(event.data);
           }
         };
 
         recorder.onstop = () => {
-          console.log('Recording stopped, creating blob...');
-          const blob = new Blob(chunks, { type: mimeType });
+          console.log('Recording stopped, creating blob from', chunksRef.current.length, 'chunks');
+          
+          if (chunksRef.current.length === 0) {
+            console.error('No chunks recorded');
+            setIsRecording(false);
+            return;
+          }
+
+          const finalMimeType = recorder.mimeType || mimeType;
+          const blob = new Blob(chunksRef.current, { type: finalMimeType });
+          console.log('Created blob:', blob.size, 'bytes, type:', blob.type);
+          
           setRecordedBlob(blob);
           setIsRecording(false);
-          console.log('Recording complete, blob size:', blob.size);
-          resolve();
         };
 
         recorder.onerror = (event) => {
           console.error('MediaRecorder error:', event);
           setIsRecording(false);
-          reject(new Error('Recording failed'));
+          reject(new Error(`Recording failed: ${(event as any).error?.message || 'Unknown error'}`));
+        };
+
+        recorder.onstart = () => {
+          console.log('Recording started');
+          setIsRecording(true);
         };
 
         recorderRef.current = recorder;
-        recorder.start(200);
-        setIsRecording(true);
-        console.log('Recording started...');
+        
+        // Start recording with timeslice for regular data events
+        recorder.start(100);
+        
+        // Resolve immediately after starting
         resolve();
+        
       } catch (error) {
         console.error('Failed to start recording:', error);
+        setIsRecording(false);
         reject(error);
       }
     });
   };
 
   const stopRecording = () => {
-    if (recorderRef.current && isRecording) {
+    console.log('Stopping recording...');
+    if (recorderRef.current && recorderRef.current.state === 'recording') {
       recorderRef.current.stop();
+      
+      // Stop all tracks in the stream
+      const stream = recorderRef.current.stream;
+      if (stream) {
+        stream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+    } else {
+      console.log('Recorder not in recording state:', recorderRef.current?.state);
     }
   };
 
   const getRecordedUrl = (): string | null => {
-    return recordedBlob ? URL.createObjectURL(recordedBlob) : null;
+    if (recordedBlob) {
+      const url = URL.createObjectURL(recordedBlob);
+      console.log('Generated recorded URL:', url);
+      return url;
+    }
+    console.log('No recorded blob available');
+    return null;
   };
 
   const reset = () => {
+    console.log('Resetting recorder');
     setRecordedBlob(null);
     setIsRecording(false);
+    chunksRef.current = [];
     recorderRef.current = null;
   };
 
