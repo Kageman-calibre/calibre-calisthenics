@@ -9,11 +9,14 @@ import QuickAnalysis from './QuickAnalysis';
 import AdvancedMovementAnalysis from './AdvancedMovementAnalysis';
 import EnhancedFeedbackSystem from './EnhancedFeedbackSystem';
 import VideoAnnotator from './VideoAnnotator';
+import WorkoutSelector from './WorkoutSelector';
 import { useVideoAnalysis } from './useVideoAnalysis';
 
 const VideoAnalytics = () => {
   const [uploadedVideo, setUploadedVideo] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedWorkout, setSelectedWorkout] = useState<any>(null);
+  const [showWorkoutSelector, setShowWorkoutSelector] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const {
@@ -24,7 +27,7 @@ const VideoAnalytics = () => {
     enhancedFeedback,
     analyzeVideo,
     resetAnalysis
-  } = useVideoAnalysis();
+  } = useVideoAnalysis(selectedWorkout);
 
   const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -33,6 +36,16 @@ const VideoAnalytics = () => {
       setUploadedVideo(videoUrl);
       resetAnalysis();
     }
+  };
+
+  const handleWorkoutSelect = (workout: any) => {
+    setSelectedWorkout(workout);
+    setShowWorkoutSelector(false);
+  };
+
+  const handleSkipWorkoutSelection = () => {
+    setSelectedWorkout(null);
+    setShowWorkoutSelector(false);
   };
 
   const handlePlayback = (timestamp: number) => {
@@ -63,6 +76,8 @@ const VideoAnalytics = () => {
 
   const handleUploadNew = () => {
     setUploadedVideo(null);
+    setSelectedWorkout(null);
+    setShowWorkoutSelector(true);
     resetAnalysis();
   };
 
@@ -70,7 +85,16 @@ const VideoAnalytics = () => {
     <div className="space-y-8">
       <VideoAnalyticsHeader />
 
-      {!uploadedVideo && <VideoUpload onVideoUpload={handleVideoUpload} />}
+      {!uploadedVideo && showWorkoutSelector && (
+        <WorkoutSelector 
+          onWorkoutSelect={handleWorkoutSelect}
+          onSkip={handleSkipWorkoutSelection}
+        />
+      )}
+
+      {!uploadedVideo && !showWorkoutSelector && (
+        <VideoUpload onVideoUpload={handleVideoUpload} />
+      )}
 
       {uploadedVideo && (
         <div className="grid lg:grid-cols-2 gap-8">

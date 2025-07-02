@@ -6,7 +6,7 @@ import { generateCalisthenicsSkillFeedback } from './utils/feedbackGenerator';
 import { generateCalisthenicsAdvancedAnalysis } from './utils/advancedAnalysisGenerator';
 import { generateEnhancedFeedback } from './utils/enhancedFeedbackGenerator';
 
-export const useVideoAnalysis = () => {
+export const useVideoAnalysis = (selectedWorkout?: any) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
@@ -30,8 +30,8 @@ export const useVideoAnalysis = () => {
     setTimeout(() => {
       setIsAnalyzing(false);
       
-      // Detect calisthenics skill dynamically
-      const detectedSkill = detectCalisthenicsSkill();
+      // Use selected workout or detect skill dynamically
+      const detectedSkill = selectedWorkout ? selectedWorkout.name : detectCalisthenicsSkill();
       const skillData = generateCalisthenicsSkillFeedback(detectedSkill);
       const formScore = 70 + Math.floor(Math.random() * 25); // Calisthenics skills typically score higher when achieved
       const holdTime = 5 + Math.floor(Math.random() * 15); // For static holds
