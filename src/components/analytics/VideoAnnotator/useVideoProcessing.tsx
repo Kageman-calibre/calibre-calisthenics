@@ -135,18 +135,31 @@ export const useVideoProcessing = () => {
           
           // Stop recording and finalize
           setTimeout(async () => {
+            console.log('Video ended, stopping recording...');
             stopRecording();
             
             // Wait a bit for recording to finalize
             setTimeout(() => {
+              console.log('Getting recorded URL after processing complete...');
               const recordedUrl = getRecordedUrl();
+              console.log('Final recordedUrl:', recordedUrl);
               if (recordedUrl) {
                 console.log('Processed video URL ready:', recordedUrl);
                 setProcessedVideoUrl(recordedUrl);
                 setProcessingProgress(100);
                 setEstimatedTimeRemaining(0);
               } else {
-                console.error('Failed to get recorded URL');
+                console.error('Failed to get recorded URL - no blob available');
+                // Try again after a longer delay
+                setTimeout(() => {
+                  const retryUrl = getRecordedUrl();
+                  console.log('Retry recordedUrl:', retryUrl);
+                  if (retryUrl) {
+                    setProcessedVideoUrl(retryUrl);
+                    setProcessingProgress(100);
+                    setEstimatedTimeRemaining(0);
+                  }
+                }, 1000);
               }
               setIsProcessing(false);
             }, 500);

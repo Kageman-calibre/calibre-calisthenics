@@ -19,8 +19,10 @@ export const useVideoRecorder = () => {
         const { mimeType } = getVideoSupport();
         console.log('Using MIME type:', mimeType);
         
-        const stream = canvas.captureStream(30);
+        // Get canvas stream with higher frame rate
+        const stream = canvas.captureStream(60); // Increased from 30 to 60 FPS
         console.log('Canvas stream created:', stream);
+        console.log('Stream tracks:', stream.getTracks().map(t => ({ kind: t.kind, enabled: t.enabled, readyState: t.readyState })));
         
         // Check if stream has video tracks
         if (!stream.getVideoTracks().length) {
@@ -29,7 +31,7 @@ export const useVideoRecorder = () => {
 
         const options: MediaRecorderOptions = {
           mimeType,
-          videoBitsPerSecond: 1000000
+          videoBitsPerSecond: 2500000 // Increased bitrate for better quality
         };
 
         // Check if the MIME type is supported
@@ -52,14 +54,23 @@ export const useVideoRecorder = () => {
           console.log('Recording stopped, creating blob from', chunksRef.current.length, 'chunks');
           
           if (chunksRef.current.length === 0) {
-            console.error('No chunks recorded');
+            console.error('No chunks recorded - this is the main issue!');
             setIsRecording(false);
             return;
           }
 
+          // Check chunk sizes
+          const totalSize = chunksRef.current.reduce((size, chunk) => size + chunk.size, 0);
+          console.log('Total recorded data size:', totalSize, 'bytes');
+
           const finalMimeType = recorder.mimeType || mimeType;
           const blob = new Blob(chunksRef.current, { type: finalMimeType });
           console.log('Created blob:', blob.size, 'bytes, type:', blob.type);
+          
+          if (blob.size === 0) {
+            console.error('Created blob has zero size - recording failed!');
+            return;
+          }
           
           setRecordedBlob(blob);
           setIsRecording(false);
@@ -78,8 +89,9 @@ export const useVideoRecorder = () => {
 
         recorderRef.current = recorder;
         
-        // Start recording with timeslice for regular data events
-        recorder.start(100);
+        // Start recording with smaller timeslice for more frequent data events
+        console.log('Starting MediaRecorder...');
+        recorder.start(250); // Reduced from 100 to 250ms for more stable recording
         
         // Resolve immediately after starting
         resolve();
@@ -110,7 +122,9 @@ export const useVideoRecorder = () => {
   };
 
   const getRecordedUrl = (): string | null => {
+    console.log('getRecordedUrl called, recordedBlob:', recordedBlob);
     if (recordedBlob) {
+      console.log('Creating URL from blob - size:', recordedBlob.size, 'type:', recordedBlob.type);
       const url = URL.createObjectURL(recordedBlob);
       console.log('Generated recorded URL:', url);
       return url;

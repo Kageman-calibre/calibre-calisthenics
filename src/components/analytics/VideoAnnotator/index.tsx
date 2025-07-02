@@ -21,14 +21,41 @@ const VideoAnnotator = ({ videoUrl, analysisResult }: VideoAnnotatorProps) => {
   };
 
   const handleDownloadVideo = () => {
-    if (!processedVideoUrl) return;
+    console.log('Download button clicked');
+    console.log('processedVideoUrl:', processedVideoUrl);
     
+    if (!processedVideoUrl) {
+      console.error('No processed video URL available for download');
+      
+      // Fallback: try to create a single frame image if canvas has content
+      if (canvasRef.current) {
+        console.log('Attempting fallback image download...');
+        canvasRef.current.toBlob((blob) => {
+          if (blob) {
+            const imageUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = `${analysisResult.exercise}_frame.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(imageUrl);
+            console.log('Downloaded single frame as fallback');
+          }
+        }, 'image/png');
+      }
+      return;
+    }
+    
+    console.log('Creating download link...');
     const link = document.createElement('a');
     link.href = processedVideoUrl;
     link.download = `${analysisResult.exercise}_analyzed.webm`;
     document.body.appendChild(link);
+    console.log('Triggering download...');
     link.click();
     document.body.removeChild(link);
+    console.log('Download triggered successfully');
   };
 
   return (
