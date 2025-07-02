@@ -17,11 +17,15 @@ const WorkoutSelector = ({ onWorkoutSelect, onSkip }: WorkoutSelectorProps) => {
 
   const categories = Array.from(new Set(exerciseDatabase.map(ex => ex.category)));
   
-  const filteredExercises = selectedCategory 
+  const filteredExercises = selectedCategory && selectedCategory !== 'all'
     ? exerciseDatabase.filter(ex => ex.category === selectedCategory)
     : exerciseDatabase;
 
   const handleExerciseSelect = (exerciseId: string) => {
+    if (exerciseId === 'none') {
+      setSelectedExercise(null);
+      return;
+    }
     const exercise = exerciseDatabase.find(ex => ex.id === exerciseId);
     setSelectedExercise(exercise);
   };
@@ -75,7 +79,7 @@ const WorkoutSelector = ({ onWorkoutSelect, onSkip }: WorkoutSelectorProps) => {
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent className="bg-slate-700 border-slate-600">
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all" className="text-white">All Categories</SelectItem>
                 {categories.map(category => (
                   <SelectItem key={category} value={category} className="text-white capitalize">
                     {category}
@@ -89,11 +93,12 @@ const WorkoutSelector = ({ onWorkoutSelect, onSkip }: WorkoutSelectorProps) => {
             <label className="text-sm font-medium text-gray-300 mb-2 block">
               Exercise
             </label>
-            <Select value={selectedExercise?.id || ''} onValueChange={handleExerciseSelect}>
+            <Select value={selectedExercise?.id || 'none'} onValueChange={handleExerciseSelect}>
               <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
                 <SelectValue placeholder="Select exercise" />
               </SelectTrigger>
               <SelectContent className="bg-slate-700 border-slate-600">
+                <SelectItem value="none" className="text-gray-400">Select an exercise</SelectItem>
                 {filteredExercises.map(exercise => (
                   <SelectItem key={exercise.id} value={exercise.id} className="text-white">
                     {exercise.name}
