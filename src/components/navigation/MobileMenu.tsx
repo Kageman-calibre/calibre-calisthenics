@@ -17,14 +17,14 @@ const MobileMenu = ({ isOpen, items, user, avatarConfig, onClose, onSignOut }: M
   if (!isOpen) return null;
 
   return (
-    <div className="md:hidden absolute top-full left-0 right-0 bg-black/20 backdrop-blur-xl border-b border-white/10 shadow-2xl">
+    <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-xl border-b border-border">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         {items.map((item) => (
           <Link
             key={item.name}
             to={item.href}
             onClick={onClose}
-            className="text-white/80 hover:text-white hover:bg-white/10 block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 backdrop-blur-sm border border-transparent hover:border-white/10"
+            className="text-muted-foreground hover:text-foreground hover:bg-muted block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300"
           >
             <div className="flex items-center space-x-3">
               {item.icon && <item.icon className="h-5 w-5" />}
@@ -34,10 +34,10 @@ const MobileMenu = ({ isOpen, items, user, avatarConfig, onClose, onSignOut }: M
         ))}
         
         {user && (
-          <div className="border-t border-white/10 pt-4 mt-4">
+          <div className="border-t border-border pt-4 mt-4">
             <button
               onClick={onSignOut}
-              className="text-white/80 hover:text-white hover:bg-white/10 block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 backdrop-blur-sm border border-transparent hover:border-white/10"
+              className="text-muted-foreground hover:text-foreground hover:bg-muted block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all duration-300"
             >
               Sign Out
             </button>
