@@ -16,73 +16,73 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 45 100% 50%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 0 75% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 50% 25%;
+    --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 45 100% 50%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 0 75% 45%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 45 100% 50%;
+    --ring: 0 75% 45%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 0%;
-    --sidebar-primary: 45 100% 50%;
-    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-primary: 0 75% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 96%;
     --sidebar-accent-foreground: 0 0% 0%;
     --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 45 100% 50%;
+    --sidebar-ring: 0 75% 45%;
   }
 
   .dark {
-    --background: 0 0% 0%;
+    --background: 0 0% 3%;
     --foreground: 0 0% 100%;
 
-    --card: 0 0% 5%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 5%;
+    --popover: 0 0% 8%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 45 100% 50%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 0 85% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 50% 25%;
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 10%;
+    --muted: 0 0% 12%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 45 100% 50%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 0 85% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 30%;
+    --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 45 100% 50%;
-    --sidebar-background: 0 0% 5%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 85% 55%;
+    --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 45 100% 50%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 10%;
+    --sidebar-primary: 0 85% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 12%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 15%;
-    --sidebar-ring: 45 100% 50%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 0 85% 55%;
   }
 }
 
@@ -96,37 +96,45 @@
   }
 }
 
-/* Custom color classes for the new palette */
+/* Custom color classes based on Calibre logo palette */
 @layer utilities {
-  .text-gold {
-    color: rgb(255, 215, 0);
+  .text-crimson {
+    color: hsl(0, 85%, 55%);
   }
   
-  .bg-gold {
-    background-color: rgb(255, 215, 0);
+  .bg-crimson {
+    background-color: hsl(0, 85%, 55%);
   }
   
-  .border-gold {
-    border-color: rgb(255, 215, 0);
+  .border-crimson {
+    border-color: hsl(0, 85%, 55%);
   }
   
-  .text-burgundy {
-    color: rgb(128, 0, 32);
+  .text-charcoal {
+    color: hsl(0, 0%, 15%);
   }
   
-  .bg-burgundy {
-    background-color: rgb(128, 0, 32);
+  .bg-charcoal {
+    background-color: hsl(0, 0%, 15%);
   }
   
-  .border-burgundy {
-    border-color: rgb(128, 0, 32);
+  .border-charcoal {
+    border-color: hsl(0, 0%, 15%);
   }
   
-  .gradient-gold-burgundy {
-    background: linear-gradient(135deg, rgb(255, 215, 0), rgb(128, 0, 32));
+  .gradient-crimson-charcoal {
+    background: linear-gradient(135deg, hsl(0, 85%, 55%), hsl(0, 0%, 15%));
   }
   
-  .gradient-black-burgundy {
-    background: linear-gradient(135deg, rgb(0, 0, 0), rgb(128, 0, 32));
+  .gradient-black-crimson {
+    background: linear-gradient(135deg, hsl(0, 0%, 3%), hsl(0, 85%, 55%));
+  }
+  
+  .shadow-crimson {
+    box-shadow: 0 10px 30px -10px hsl(0, 85%, 55%, 0.3);
+  }
+  
+  .glow-crimson {
+    box-shadow: 0 0 40px hsl(0, 85%, 55%, 0.4);
   }
 }
