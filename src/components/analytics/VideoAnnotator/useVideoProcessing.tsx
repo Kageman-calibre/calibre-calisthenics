@@ -134,36 +134,29 @@ export const useVideoProcessing = () => {
           isComplete = true;
           
           // Stop recording and finalize
-          setTimeout(async () => {
-            console.log('Video ended, stopping recording...');
-            stopRecording();
+          console.log('Video ended, stopping recording...');
+          stopRecording();
+          
+          // Wait for recording to finalize, then get URL
+          const checkForRecordedVideo = () => {
+            console.log('Checking for recorded video...');
+            const recordedUrl = getRecordedUrl();
+            console.log('Recorded URL:', recordedUrl);
             
-            // Wait a bit for recording to finalize
-            setTimeout(() => {
-              console.log('Getting recorded URL after processing complete...');
-              const recordedUrl = getRecordedUrl();
-              console.log('Final recordedUrl:', recordedUrl);
-              if (recordedUrl) {
-                console.log('Processed video URL ready:', recordedUrl);
-                setProcessedVideoUrl(recordedUrl);
-                setProcessingProgress(100);
-                setEstimatedTimeRemaining(0);
-              } else {
-                console.error('Failed to get recorded URL - no blob available');
-                // Try again after a longer delay
-                setTimeout(() => {
-                  const retryUrl = getRecordedUrl();
-                  console.log('Retry recordedUrl:', retryUrl);
-                  if (retryUrl) {
-                    setProcessedVideoUrl(retryUrl);
-                    setProcessingProgress(100);
-                    setEstimatedTimeRemaining(0);
-                  }
-                }, 1000);
-              }
+            if (recordedUrl) {
+              console.log('Processed video URL ready:', recordedUrl);
+              setProcessedVideoUrl(recordedUrl);
+              setProcessingProgress(100);
+              setEstimatedTimeRemaining(0);
               setIsProcessing(false);
-            }, 500);
-          }, 100);
+            } else {
+              console.log('No recorded URL yet, will retry...');
+              setTimeout(checkForRecordedVideo, 200);
+            }
+          };
+          
+          // Start checking after a brief delay
+          setTimeout(checkForRecordedVideo, 300);
           return;
         }
 

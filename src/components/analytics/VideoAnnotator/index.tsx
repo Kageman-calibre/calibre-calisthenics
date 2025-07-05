@@ -60,14 +60,15 @@ const VideoAnnotator = ({ videoUrl, analysisResult }: VideoAnnotatorProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="hidden">
+      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
         <video
           ref={videoRef}
           src={videoUrl}
           muted
           preload="metadata"
+          style={{ width: '640px', height: '480px' }}
         />
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} style={{ width: '640px', height: '480px' }} />
       </div>
 
       <AnnotatorControls
